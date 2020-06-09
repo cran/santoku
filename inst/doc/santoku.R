@@ -30,7 +30,7 @@ chopped <- chop_width(x, 2)
 data.frame(x, chopped)
 
 ## -----------------------------------------------------------------------------
-chopped <- chop_evenly(x, groups = 3)
+chopped <- chop_evenly(x, intervals = 3)
 data.frame(x, chopped)
 
 ## -----------------------------------------------------------------------------
@@ -56,15 +56,17 @@ tab_evenly(x, 5)
 tab_mean_sd(x)
 
 ## -----------------------------------------------------------------------------
+library(lubridate)
+y2k <- as.Date("2000-01-01") + 0:365
+months <- chop_width(y2k, months(1))
+table(months)
+
+## -----------------------------------------------------------------------------
 chopped <- chop(x, c(2, 5, 8), labels = c("Lowest", "Low", "Higher", "Highest"))
 data.frame(x, chopped)
 
 ## -----------------------------------------------------------------------------
 chopped <- chop(x, c(2, 5, 8), lbl_dash())
-data.frame(x, chopped)
-
-## -----------------------------------------------------------------------------
-chopped <- chop(x, c(2, 5, 8), lbl_format("%s to %s"))
 data.frame(x, chopped)
 
 ## -----------------------------------------------------------------------------
@@ -76,6 +78,16 @@ chop(x, c(2, 5, 8), lbl_seq("(1)"))
 chop(x, c(2, 5, 8), lbl_seq("i."))
 
 ## -----------------------------------------------------------------------------
+chopped <- chop(x, c(2, 5, 8), lbl_format("%s to %s"))
+data.frame(x, chopped)
+
+## -----------------------------------------------------------------------------
+library(scales)
+r <- runif(10)
+chopped <- chop(r, c(.3, .5, .7), lbl_intervals(fmt = label_percent(0.1)))
+data.frame(r, chopped)
+
+## -----------------------------------------------------------------------------
 chopped <- chop(x, c(3, 5, 7), extend = FALSE)
 data.frame(x, chopped)
 
@@ -84,25 +96,14 @@ y <- 1:5
 data.frame(
         y = y, 
         left_closed = chop(y, 1:5), 
-        right_closed = chop(y, brk_right(1:5))
+        right_closed = chop(y, 1:5, left = FALSE)
       )
 
 ## -----------------------------------------------------------------------------
-z <- 1:5
 data.frame(
-  z = z,
-  rightmost_closed = chop(1:5, brk_left(1:5)),
-  rightmost_open   = chop(1:5, brk_left(1:5, close_end = FALSE))
+  y = y,
+  rightmost_open = chop(y, 1:5),
+  rightmost_closed   = chop(y, 1:5, close_end = TRUE)
 )
-
-
-## -----------------------------------------------------------------------------
-chop_by_quartiles <- knife(
-        breaks = brk_quantiles(c(0.25, 0.5, 0.75)), 
-        labels = lbl_dash()
-      )
-
-chop_by_quartiles(x)
-table(chop_by_quartiles(rnorm(50)))
 
 

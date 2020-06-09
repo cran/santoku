@@ -2,7 +2,7 @@
 % Please edit documentation in R/labels.R
 \name{lbl_seq}
 \alias{lbl_seq}
-\title{Label sequentially}
+\title{Label chopped intervals in sequence}
 \usage{
 lbl_seq(start = "a")
 }
@@ -35,6 +35,7 @@ chop(1:10, c(2, 5, 8), lbl_seq("(A)"))
 \seealso{
 Other labelling functions: 
 \code{\link{lbl_dash}()},
+\code{\link{lbl_discrete}()},
 \code{\link{lbl_format}()},
 \code{\link{lbl_intervals}()},
 \code{\link{lbl_manual}()}
