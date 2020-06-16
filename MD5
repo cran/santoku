@@ -1,10 +1,10 @@
-b794135fcdab124388b15975be9857f4 *DESCRIPTION
+98b260fcb51d916197d68fd27de30b40 *DESCRIPTION
 1d7ff5430728cf44766ea59da359d3b2 *LICENSE
 938914fc355d0b00a5c5d797f7390ed1 *NAMESPACE
-adcaddc74f2a1b9a4a8ebfee5219b280 *NEWS.md
+f5279ef51d45b94cf0617af270e7f83a *NEWS.md
 8d4c547e3d87f06e4880f700bfb3c6d5 *R/RcppExports.R
-0994a1574507bc8025e7bbdf7a5e4d2d *R/breaks-impl.R
-590e57a4e6e7135acaf8076f902670ed *R/breaks.R
+809025eb9aa269584c135d0321306935 *R/breaks-impl.R
+f7cdd9cfc2c254c9e4d45608acde5baa *R/breaks.R
 8cf92f88865f0ed3cf5a1cbab7a4e8a1 *R/categorize.R
 a5a2b67df8d35ae68c5addbf47212af7 *R/chop.R
 4d5992fa69a0a918d627bdb2103e30ce *R/knife.R
@@ -13,8 +13,8 @@ c643a874314a69274c23152fdc8c7180 *R/labels-impl.R
 cdb887db3a58eb191b608b355d1f009f *R/santoku-package.R
 d057e0c5c96444f8a1f836dfcd32d7a4 *R/tab.R
 07175a56e57ff68754d8cdbf8d2071ab *R/utils.R
-ba9ed728cc852a2e555d7011c48a2000 *README.md
-34f781ce085e257df72487de441d38a1 *build/santoku.pdf
+9f07947a10231aa9683bfb19e70fbe7a *README.md
+6047338885bde4bfbccaedc48b680ff3 *build/santoku.pdf
 3db2f10f35f3095f2e3b2b577f1e23b9 *build/vignette.rds
 d90578196753f03a038d848ef4d5098e *inst/doc/santoku.R
 38430a3fd66822e6f38643e0cec64360 *inst/doc/santoku.Rmd
@@ -23,7 +23,7 @@ bcf9e15982fb324eefec0c8a354d282c *inst/doc/santoku.html
 55915148f1af5c7025d3ef071b005968 *man/brk-left-right.Rd
 39a2850b061c96f6c5eae078792cf2e3 *man/brk_default.Rd
 c998d1e79758c5d8a499ee06d23f73ad *man/brk_manual.Rd
-059b8830d4caadc7af487d68d230c361 *man/brk_width-for-datetime.Rd
+a26898cdcf101ec1757e303b2a8391e5 *man/brk_width-for-datetime.Rd
 4034189b03671cc8cd32b02b13dcbf3c *man/chop.Rd
 3e11ed1e0ea70a58ba04969a2abbaa93 *man/chop_mean_sd.Rd
 5cb47e8a9554fb31c33900b980a72b10 *man/chop_n.Rd
@@ -60,9 +60,9 @@ e1831eb8d265c92f7c4d26183ba87cea *tests/testthat/setup-functions.R
 6e3cfb1744e0cd09f410b133d6b76694 *tests/testthat/test-Date-DateTime.R
 b67f0250b94b902f581a08d7b1bd4d2b *tests/testthat/test-breaks.R
 1fd6c1b133fd208a5cf35be6e33402a6 *tests/testthat/test-categorize.R
-66966849143ed3d34de24c0bd51ea9db *tests/testthat/test-chop.R
+d8f84e78a8e34f0e4c82005b6b24268a *tests/testthat/test-chop.R
 2395a9e4c804a597d252925f5cbf94e9 *tests/testthat/test-knife.R
 721ba0e3c965e13e87bf7cfce84fa1e7 *tests/testthat/test-labels.R
 6b5f3c3b019203efc3910c3ffc89cc32 *tests/testthat/test-tab.R
-0ea108f3b4311eb2dfacb00f6c85103b *tests/testthat/test-zzz-systematic.R
+d8ae26ca5562a0045ab93ca3322d58fc *tests/testthat/test-zzz-systematic.R
 38430a3fd66822e6f38643e0cec64360 *vignettes/santoku.Rmd
