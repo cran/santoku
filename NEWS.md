@@ -1,3 +1,11 @@
+
+# santoku 0.6.0
+
+* New arguments `first` and `last` in `lbl_dash()` and `lbl_discrete()` allow you 
+  to override the first and last interval labels.
+
+* Fixes for CRAN.
+
 # santoku 0.5.0
 
 * Negative numbers can be used in `chop_width()`.

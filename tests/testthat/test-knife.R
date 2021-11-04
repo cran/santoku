@@ -1,9 +1,4 @@
 
-test_that("deprecation warning", {
-  skip_on_cran() # not sure why, maybe to do with the 8 hour lifecycle thing?
-  expect_warning(knife(breaks = 1:3), "deprecated")
-})
-
 
 test_that("basic functionality", {
   k <- knife(breaks = 1:3)
@@ -14,7 +9,6 @@ test_that("basic functionality", {
   expect_equivalent(k(x), chop(x, breaks = brk_quantiles(0.5)))
   y <- c(1, 4, 7, 10, 15)
   expect_equivalent(k(y), chop(y, breaks = brk_quantiles(0.5)))
-
 
   k2 <- knife(breaks = 1:3, labels = lbl_seq())
   x <- 0.5 + 1:3

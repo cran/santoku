@@ -14,39 +14,40 @@
 
 <title>Introduction to santoku</title>
 
-<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
-// v0.0.1
-// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
 
-document.addEventListener('DOMContentLoaded', function() {
-  const codeList = document.getElementsByClassName("sourceCode");
-  for (var i = 0; i < codeList.length; i++) {
-    var linkList = codeList[i].getElementsByTagName('a');
-    for (var j = 0; j < linkList.length; j++) {
-      if (linkList[j].innerHTML === "") {
-        linkList[j].setAttribute('aria-hidden', 'true');
-      }
-    }
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
   }
-});
-</script>
-
-
-<style type="text/css">code{white-space: pre;}</style>
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -66,7 +67,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -123,187 +124,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<style type="text/css">body {
-background-color: #fff;
-margin: 1em auto;
-max-width: 700px;
-overflow: visible;
-padding-left: 2em;
-padding-right: 2em;
-font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-font-size: 14px;
-line-height: 1.35;
-}
-#TOC {
-clear: both;
-margin: 0 0 10px 10px;
-padding: 4px;
-width: 400px;
-border: 1px solid #CCCCCC;
-border-radius: 5px;
-background-color: #f6f6f6;
-font-size: 13px;
-line-height: 1.3;
-}
-#TOC .toctitle {
-font-weight: bold;
-font-size: 15px;
-margin-left: 5px;
-}
-#TOC ul {
-padding-left: 40px;
-margin-left: -1.5em;
-margin-top: 5px;
-margin-bottom: 5px;
-}
-#TOC ul ul {
-margin-left: -2em;
-}
-#TOC li {
-line-height: 16px;
-}
-table {
-margin: 1em auto;
-border-width: 1px;
-border-color: #DDDDDD;
-border-style: outset;
-border-collapse: collapse;
-}
-table th {
-border-width: 2px;
-padding: 5px;
-border-style: inset;
-}
-table td {
-border-width: 1px;
-border-style: inset;
-line-height: 18px;
-padding: 5px 5px;
-}
-table, table th, table td {
-border-left-style: none;
-border-right-style: none;
-}
-table thead, table tr.even {
-background-color: #f7f7f7;
-}
-p {
-margin: 0.5em 0;
-}
-blockquote {
-background-color: #f6f6f6;
-padding: 0.25em 0.75em;
-}
-hr {
-border-style: solid;
-border: none;
-border-top: 1px solid #777;
-margin: 28px 0;
-}
-dl {
-margin-left: 0;
-}
-dl dd {
-margin-bottom: 13px;
-margin-left: 13px;
-}
-dl dt {
-font-weight: bold;
-}
-ul {
-margin-top: 0;
-}
-ul li {
-list-style: circle outside;
-}
-ul ul {
-margin-bottom: 0;
-}
-pre, code {
-background-color: #f7f7f7;
-border-radius: 3px;
-color: #333;
-white-space: pre-wrap; 
-}
-pre {
-border-radius: 3px;
-margin: 5px 0px 10px 0px;
-padding: 10px;
-}
-pre:not([class]) {
-background-color: #f7f7f7;
-}
-code {
-font-family: Consolas, Monaco, 'Courier New', monospace;
-font-size: 85%;
-}
-p > code, li > code {
-padding: 2px 0px;
-}
-div.figure {
-text-align: center;
-}
-img {
-background-color: #FFFFFF;
-padding: 2px;
-border: 1px solid #DDDDDD;
-border-radius: 3px;
-border: 1px solid #CCCCCC;
-margin: 0 5px;
-}
-h1 {
-margin-top: 0;
-font-size: 35px;
-line-height: 40px;
-}
-h2 {
-border-bottom: 4px solid #f7f7f7;
-padding-top: 10px;
-padding-bottom: 2px;
-font-size: 145%;
-}
-h3 {
-border-bottom: 2px solid #f7f7f7;
-padding-top: 10px;
-font-size: 120%;
-}
-h4 {
-border-bottom: 1px solid #f7f7f7;
-margin-left: 8px;
-font-size: 105%;
-}
-h5, h6 {
-border-bottom: 1px solid #ccc;
-font-size: 105%;
-}
-a {
-color: #0033dd;
-text-decoration: none;
-}
-a:hover {
-color: #6666ff; }
-a:visited {
-color: #800080; }
-a:visited:hover {
-color: #BB00BB; }
-a[href^="http:"] {
-text-decoration: underline; }
-a[href^="https:"] {
-text-decoration: underline; }
 
-code > span.kw { color: #555; font-weight: bold; } 
-code > span.dt { color: #902000; } 
-code > span.dv { color: #40a070; } 
-code > span.bn { color: #d14; } 
-code > span.fl { color: #d14; } 
-code > span.ch { color: #d14; } 
-code > span.st { color: #d14; } 
-code > span.co { color: #888888; font-style: italic; } 
-code > span.ot { color: #007020; } 
-code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; } 
-code > span.er { color: #a61717; background-color: #e3d2d2; } 
-</style>
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
 
 
 
@@ -322,300 +144,300 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="installation" class="section level2">
 <h2>Installation</h2>
 <p>To install santoku, run:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">install.packages</span>(<span class="st">&quot;santoku&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;santoku&quot;</span>)</span></code></pre></div>
 </div>
 <div id="basic-usage" class="section level2">
 <h2>Basic usage</h2>
 <p>Use <code>chop()</code> like <code>cut()</code> to cut your data up:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">library</span>(santoku)</span>
-<span id="cb2-2"><a href="#cb2-2"></a>x &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>, <span class="dv">0</span>, <span class="dv">10</span>)</span>
-<span id="cb2-3"><a href="#cb2-3"></a>(chopped &lt;-<span class="st"> </span><span class="kw">chop</span>(x, <span class="dt">breaks =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">10</span>))</span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt;  [1] [4, 5)  [8, 9)  [3, 4)  [4, 5)  [7, 8)  [9, 10) [6, 7)  [8, 9)  [1, 2) </span></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt; [10] [4, 5) </span></span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt; Levels: [1, 2) [3, 4) [4, 5) [6, 7) [7, 8) [8, 9) [9, 10)</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="kw">data.frame</span>(x, chopped)</span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt;           x chopped</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt; 1  4.978305  [4, 5)</span></span>
-<span id="cb2-10"><a href="#cb2-10"></a><span class="co">#&gt; 2  8.969989  [8, 9)</span></span>
-<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#&gt; 3  3.391823  [3, 4)</span></span>
-<span id="cb2-12"><a href="#cb2-12"></a><span class="co">#&gt; 4  4.676785  [4, 5)</span></span>
-<span id="cb2-13"><a href="#cb2-13"></a><span class="co">#&gt; 5  7.057042  [7, 8)</span></span>
-<span id="cb2-14"><a href="#cb2-14"></a><span class="co">#&gt; 6  9.707687 [9, 10)</span></span>
-<span id="cb2-15"><a href="#cb2-15"></a><span class="co">#&gt; 7  6.713807  [6, 7)</span></span>
-<span id="cb2-16"><a href="#cb2-16"></a><span class="co">#&gt; 8  8.376589  [8, 9)</span></span>
-<span id="cb2-17"><a href="#cb2-17"></a><span class="co">#&gt; 9  1.086165  [1, 2)</span></span>
-<span id="cb2-18"><a href="#cb2-18"></a><span class="co">#&gt; 10 4.495479  [4, 5)</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(santoku)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">10</span>, <span class="dv">0</span>, <span class="dv">10</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>(chopped <span class="ot">&lt;-</span> <span class="fu">chop</span>(x, <span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] [4, 5)  [8, 9)  [3, 4)  [4, 5)  [7, 8)  [9, 10) [6, 7)  [8, 9)  [1, 2) </span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [10] [4, 5) </span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Levels: [1, 2) [3, 4) [4, 5) [6, 7) [7, 8) [8, 9) [9, 10)</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(x, chopped)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           x chopped</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  4.978305  [4, 5)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  8.969989  [8, 9)</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  3.391823  [3, 4)</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  4.676785  [4, 5)</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5  7.057042  [7, 8)</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  9.707687 [9, 10)</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7  6.713807  [6, 7)</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8  8.376589  [8, 9)</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9  1.086165  [1, 2)</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 4.495479  [4, 5)</span></span></code></pre></div>
 <p><code>chop()</code> returns a factor.</p>
 <p>If data is beyond the limits of <code>breaks</code>, they will be extended automatically:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>chopped &lt;-<span class="st"> </span><span class="kw">chop</span>(x, <span class="dt">breaks =</span> <span class="dv">3</span><span class="op">:</span><span class="dv">7</span>)</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">data.frame</span>(x, chopped)</span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt;           x    chopped</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; 1  4.978305     [4, 5)</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt; 2  8.969989 [7, 9.708]</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt; 3  3.391823     [3, 4)</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="co">#&gt; 4  4.676785     [4, 5)</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a><span class="co">#&gt; 5  7.057042 [7, 9.708]</span></span>
-<span id="cb3-9"><a href="#cb3-9"></a><span class="co">#&gt; 6  9.707687 [7, 9.708]</span></span>
-<span id="cb3-10"><a href="#cb3-10"></a><span class="co">#&gt; 7  6.713807     [6, 7)</span></span>
-<span id="cb3-11"><a href="#cb3-11"></a><span class="co">#&gt; 8  8.376589 [7, 9.708]</span></span>
-<span id="cb3-12"><a href="#cb3-12"></a><span class="co">#&gt; 9  1.086165 [1.086, 3)</span></span>
-<span id="cb3-13"><a href="#cb3-13"></a><span class="co">#&gt; 10 4.495479     [4, 5)</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>chopped <span class="ot">&lt;-</span> <span class="fu">chop</span>(x, <span class="at">breaks =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">7</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(x, chopped)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           x    chopped</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  4.978305     [4, 5)</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  8.969989 [7, 9.708]</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  3.391823     [3, 4)</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  4.676785     [4, 5)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5  7.057042 [7, 9.708]</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  9.707687 [7, 9.708]</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7  6.713807     [6, 7)</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8  8.376589 [7, 9.708]</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9  1.086165 [1.086, 3)</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 4.495479     [4, 5)</span></span></code></pre></div>
 <p>To chop a single number into a separate category, put the number twice in <code>breaks</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>x_fives &lt;-<span class="st"> </span>x</span>
-<span id="cb4-2"><a href="#cb4-2"></a>x_fives[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>] &lt;-<span class="st"> </span><span class="dv">5</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a>chopped &lt;-<span class="st"> </span><span class="kw">chop</span>(x_fives, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">8</span>))</span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="kw">data.frame</span>(x_fives, chopped)</span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="co">#&gt;     x_fives    chopped</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a><span class="co">#&gt; 1  5.000000        {5}</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a><span class="co">#&gt; 2  5.000000        {5}</span></span>
-<span id="cb4-8"><a href="#cb4-8"></a><span class="co">#&gt; 3  5.000000        {5}</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a><span class="co">#&gt; 4  5.000000        {5}</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a><span class="co">#&gt; 5  5.000000        {5}</span></span>
-<span id="cb4-11"><a href="#cb4-11"></a><span class="co">#&gt; 6  9.707687 [8, 9.708]</span></span>
-<span id="cb4-12"><a href="#cb4-12"></a><span class="co">#&gt; 7  6.713807     (5, 8)</span></span>
-<span id="cb4-13"><a href="#cb4-13"></a><span class="co">#&gt; 8  8.376589 [8, 9.708]</span></span>
-<span id="cb4-14"><a href="#cb4-14"></a><span class="co">#&gt; 9  1.086165 [1.086, 2)</span></span>
-<span id="cb4-15"><a href="#cb4-15"></a><span class="co">#&gt; 10 4.495479     [2, 5)</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>x_fives <span class="ot">&lt;-</span> x</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>x_fives[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>] <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>chopped <span class="ot">&lt;-</span> <span class="fu">chop</span>(x_fives, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">8</span>))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(x_fives, chopped)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     x_fives    chopped</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  5.000000        {5}</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  5.000000        {5}</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  5.000000        {5}</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  5.000000        {5}</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5  5.000000        {5}</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  9.707687 [8, 9.708]</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7  6.713807     (5, 8)</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8  8.376589 [8, 9.708]</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9  1.086165 [1.086, 2)</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 4.495479     [2, 5)</span></span></code></pre></div>
 <p>To quickly produce a table of chopped data, use <code>tab()</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">tab</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">8</span>))</span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="co">#&gt; x</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt;  [1, 2)  [2, 5)  [5, 8) [8, 10] </span></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt;       1       3       3       3</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">8</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; x</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1, 2)  [2, 5)  [5, 8) [8, 10] </span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       1       3       3       3</span></span></code></pre></div>
 </div>
 <div id="more-ways-to-chop" class="section level2">
 <h2>More ways to chop</h2>
 <p>To chop into fixed-width intervals, starting at the minimum value, use <code>chop_width()</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>chopped &lt;-<span class="st"> </span><span class="kw">chop_width</span>(x, <span class="dv">2</span>)</span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">data.frame</span>(x, chopped)</span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#&gt;           x        chopped</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt; 1  4.978305 [3.086, 5.086)</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#&gt; 2  8.969989 [7.086, 9.086)</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt; 3  3.391823 [3.086, 5.086)</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#&gt; 4  4.676785 [3.086, 5.086)</span></span>
-<span id="cb6-8"><a href="#cb6-8"></a><span class="co">#&gt; 5  7.057042 [5.086, 7.086)</span></span>
-<span id="cb6-9"><a href="#cb6-9"></a><span class="co">#&gt; 6  9.707687 [9.086, 11.09)</span></span>
-<span id="cb6-10"><a href="#cb6-10"></a><span class="co">#&gt; 7  6.713807 [5.086, 7.086)</span></span>
-<span id="cb6-11"><a href="#cb6-11"></a><span class="co">#&gt; 8  8.376589 [7.086, 9.086)</span></span>
-<span id="cb6-12"><a href="#cb6-12"></a><span class="co">#&gt; 9  1.086165 [1.086, 3.086)</span></span>
-<span id="cb6-13"><a href="#cb6-13"></a><span class="co">#&gt; 10 4.495479 [3.086, 5.086)</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>chopped <span class="ot">&lt;-</span> <span class="fu">chop_width</span>(x, <span class="dv">2</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(x, chopped)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           x        chopped</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  4.978305 [3.086, 5.086)</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  8.969989 [7.086, 9.086)</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  3.391823 [3.086, 5.086)</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  4.676785 [3.086, 5.086)</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5  7.057042 [5.086, 7.086)</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  9.707687 [9.086, 11.09)</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7  6.713807 [5.086, 7.086)</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8  8.376589 [7.086, 9.086)</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9  1.086165 [1.086, 3.086)</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 4.495479 [3.086, 5.086)</span></span></code></pre></div>
 <p>To chop into exactly <code>intervals</code> fixed-with intervals, use <code>chop_evenly()</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>chopped &lt;-<span class="st"> </span><span class="kw">chop_evenly</span>(x, <span class="dt">intervals =</span> <span class="dv">3</span>)</span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="kw">data.frame</span>(x, chopped)</span>
-<span id="cb7-3"><a href="#cb7-3"></a><span class="co">#&gt;           x        chopped</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a><span class="co">#&gt; 1  4.978305  [3.96, 6.834)</span></span>
-<span id="cb7-5"><a href="#cb7-5"></a><span class="co">#&gt; 2  8.969989 [6.834, 9.708]</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a><span class="co">#&gt; 3  3.391823  [1.086, 3.96)</span></span>
-<span id="cb7-7"><a href="#cb7-7"></a><span class="co">#&gt; 4  4.676785  [3.96, 6.834)</span></span>
-<span id="cb7-8"><a href="#cb7-8"></a><span class="co">#&gt; 5  7.057042 [6.834, 9.708]</span></span>
-<span id="cb7-9"><a href="#cb7-9"></a><span class="co">#&gt; 6  9.707687 [6.834, 9.708]</span></span>
-<span id="cb7-10"><a href="#cb7-10"></a><span class="co">#&gt; 7  6.713807  [3.96, 6.834)</span></span>
-<span id="cb7-11"><a href="#cb7-11"></a><span class="co">#&gt; 8  8.376589 [6.834, 9.708]</span></span>
-<span id="cb7-12"><a href="#cb7-12"></a><span class="co">#&gt; 9  1.086165  [1.086, 3.96)</span></span>
-<span id="cb7-13"><a href="#cb7-13"></a><span class="co">#&gt; 10 4.495479  [3.96, 6.834)</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>chopped <span class="ot">&lt;-</span> <span class="fu">chop_evenly</span>(x, <span class="at">intervals =</span> <span class="dv">3</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(x, chopped)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           x        chopped</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  4.978305  [3.96, 6.834)</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  8.969989 [6.834, 9.708]</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  3.391823  [1.086, 3.96)</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  4.676785  [3.96, 6.834)</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5  7.057042 [6.834, 9.708]</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  9.707687 [6.834, 9.708]</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7  6.713807  [3.96, 6.834)</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8  8.376589 [6.834, 9.708]</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9  1.086165  [1.086, 3.96)</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 4.495479  [3.96, 6.834)</span></span></code></pre></div>
 <p>To chop into groups with a fixed number of members, use <code>chop_n()</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>chopped &lt;-<span class="st"> </span><span class="kw">chop_n</span>(x, <span class="dv">4</span>)</span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="kw">table</span>(chopped)</span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="co">#&gt; chopped</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="co">#&gt; [1.086, 4.978)  [4.978, 8.97)  [8.97, 9.708] </span></span>
-<span id="cb8-5"><a href="#cb8-5"></a><span class="co">#&gt;              4              4              2</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>chopped <span class="ot">&lt;-</span> <span class="fu">chop_n</span>(x, <span class="dv">4</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(chopped)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; chopped</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1.086, 4.978)  [4.978, 8.97)  [8.97, 9.708] </span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              4              4              2</span></span></code></pre></div>
 <p>To chop into a fixed number of equal-sized groups, use <code>chop_equally()</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>chopped &lt;-<span class="st"> </span><span class="kw">chop_equally</span>(x, <span class="dt">groups =</span> <span class="dv">5</span>)</span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="kw">table</span>(chopped)</span>
-<span id="cb9-3"><a href="#cb9-3"></a><span class="co">#&gt; chopped</span></span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="co">#&gt;   [0%, 20%)  [20%, 40%)  [40%, 60%)  [60%, 80%) [80%, 100%] </span></span>
-<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#&gt;           2           2           2           2           2</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>chopped <span class="ot">&lt;-</span> <span class="fu">chop_equally</span>(x, <span class="at">groups =</span> <span class="dv">5</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(chopped)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; chopped</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   [0%, 20%)  [20%, 40%)  [40%, 60%)  [60%, 80%) [80%, 100%] </span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           2           2           2           2           2</span></span></code></pre></div>
 <p>To chop data up by quantiles, use <code>chop_quantiles()</code>:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>chopped &lt;-<span class="st"> </span><span class="kw">chop_quantiles</span>(x, <span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>))</span>
-<span id="cb10-2"><a href="#cb10-2"></a><span class="kw">data.frame</span>(x, chopped)</span>
-<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt;           x     chopped</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt; 1  4.978305  [25%, 50%)</span></span>
-<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt; 2  8.969989 (75%, 100%]</span></span>
-<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt; 3  3.391823   [0%, 25%)</span></span>
-<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt; 4  4.676785  [25%, 50%)</span></span>
-<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt; 5  7.057042  [50%, 75%]</span></span>
-<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt; 6  9.707687 (75%, 100%]</span></span>
-<span id="cb10-10"><a href="#cb10-10"></a><span class="co">#&gt; 7  6.713807  [50%, 75%]</span></span>
-<span id="cb10-11"><a href="#cb10-11"></a><span class="co">#&gt; 8  8.376589 (75%, 100%]</span></span>
-<span id="cb10-12"><a href="#cb10-12"></a><span class="co">#&gt; 9  1.086165   [0%, 25%)</span></span>
-<span id="cb10-13"><a href="#cb10-13"></a><span class="co">#&gt; 10 4.495479   [0%, 25%)</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>chopped <span class="ot">&lt;-</span> <span class="fu">chop_quantiles</span>(x, <span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>))</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(x, chopped)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           x     chopped</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  4.978305  [25%, 50%)</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  8.969989 (75%, 100%]</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  3.391823   [0%, 25%)</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  4.676785  [25%, 50%)</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5  7.057042  [50%, 75%]</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  9.707687 (75%, 100%]</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7  6.713807  [50%, 75%]</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8  8.376589 (75%, 100%]</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9  1.086165   [0%, 25%)</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 4.495479   [0%, 25%)</span></span></code></pre></div>
 <p>To chop data by standard deviations around the mean, use <code>chop_mean_sd()</code>:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>chopped &lt;-<span class="st"> </span><span class="kw">chop_mean_sd</span>(x)</span>
-<span id="cb11-2"><a href="#cb11-2"></a><span class="kw">data.frame</span>(x, chopped)</span>
-<span id="cb11-3"><a href="#cb11-3"></a><span class="co">#&gt;           x        chopped</span></span>
-<span id="cb11-4"><a href="#cb11-4"></a><span class="co">#&gt; 1  4.978305  [-1 sd, 0 sd)</span></span>
-<span id="cb11-5"><a href="#cb11-5"></a><span class="co">#&gt; 2  8.969989   [1 sd, 2 sd)</span></span>
-<span id="cb11-6"><a href="#cb11-6"></a><span class="co">#&gt; 3  3.391823  [-1 sd, 0 sd)</span></span>
-<span id="cb11-7"><a href="#cb11-7"></a><span class="co">#&gt; 4  4.676785  [-1 sd, 0 sd)</span></span>
-<span id="cb11-8"><a href="#cb11-8"></a><span class="co">#&gt; 5  7.057042   [0 sd, 1 sd)</span></span>
-<span id="cb11-9"><a href="#cb11-9"></a><span class="co">#&gt; 6  9.707687   [1 sd, 2 sd)</span></span>
-<span id="cb11-10"><a href="#cb11-10"></a><span class="co">#&gt; 7  6.713807   [0 sd, 1 sd)</span></span>
-<span id="cb11-11"><a href="#cb11-11"></a><span class="co">#&gt; 8  8.376589   [0 sd, 1 sd)</span></span>
-<span id="cb11-12"><a href="#cb11-12"></a><span class="co">#&gt; 9  1.086165 [-2 sd, -1 sd)</span></span>
-<span id="cb11-13"><a href="#cb11-13"></a><span class="co">#&gt; 10 4.495479  [-1 sd, 0 sd)</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>chopped <span class="ot">&lt;-</span> <span class="fu">chop_mean_sd</span>(x)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(x, chopped)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           x        chopped</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  4.978305  [-1 sd, 0 sd)</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  8.969989   [1 sd, 2 sd)</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  3.391823  [-1 sd, 0 sd)</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  4.676785  [-1 sd, 0 sd)</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5  7.057042   [0 sd, 1 sd)</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  9.707687   [1 sd, 2 sd)</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7  6.713807   [0 sd, 1 sd)</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8  8.376589   [0 sd, 1 sd)</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9  1.086165 [-2 sd, -1 sd)</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 4.495479  [-1 sd, 0 sd)</span></span></code></pre></div>
 <p><code>tab_n()</code>, <code>tab_width()</code>, <code>tab_evenly()</code> and <code>tab_mean_sd()</code> act similarly to <code>tab()</code>, calling the related <code>chop_</code> function and then <code>table()</code>.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">tab_n</span>(x, <span class="dv">4</span>)</span>
-<span id="cb12-2"><a href="#cb12-2"></a><span class="co">#&gt; x</span></span>
-<span id="cb12-3"><a href="#cb12-3"></a><span class="co">#&gt; [1.086, 4.978)  [4.978, 8.97)  [8.97, 9.708] </span></span>
-<span id="cb12-4"><a href="#cb12-4"></a><span class="co">#&gt;              4              4              2</span></span>
-<span id="cb12-5"><a href="#cb12-5"></a><span class="kw">tab_width</span>(x, <span class="dv">2</span>)</span>
-<span id="cb12-6"><a href="#cb12-6"></a><span class="co">#&gt; x</span></span>
-<span id="cb12-7"><a href="#cb12-7"></a><span class="co">#&gt; [1.086, 3.086) [3.086, 5.086) [5.086, 7.086) [7.086, 9.086) [9.086, 11.09) </span></span>
-<span id="cb12-8"><a href="#cb12-8"></a><span class="co">#&gt;              1              4              2              2              1</span></span>
-<span id="cb12-9"><a href="#cb12-9"></a><span class="kw">tab_evenly</span>(x, <span class="dv">5</span>)</span>
-<span id="cb12-10"><a href="#cb12-10"></a><span class="co">#&gt; x</span></span>
-<span id="cb12-11"><a href="#cb12-11"></a><span class="co">#&gt;  [1.086, 2.81)  [2.81, 4.535) [4.535, 6.259) [6.259, 7.983) [7.983, 9.708] </span></span>
-<span id="cb12-12"><a href="#cb12-12"></a><span class="co">#&gt;              1              2              2              2              3</span></span>
-<span id="cb12-13"><a href="#cb12-13"></a><span class="kw">tab_mean_sd</span>(x)</span>
-<span id="cb12-14"><a href="#cb12-14"></a><span class="co">#&gt; x</span></span>
-<span id="cb12-15"><a href="#cb12-15"></a><span class="co">#&gt; [-2 sd, -1 sd)  [-1 sd, 0 sd)   [0 sd, 1 sd)   [1 sd, 2 sd) </span></span>
-<span id="cb12-16"><a href="#cb12-16"></a><span class="co">#&gt;              1              4              3              2</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab_n</span>(x, <span class="dv">4</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; x</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1.086, 4.978)  [4.978, 8.97)  [8.97, 9.708] </span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              4              4              2</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tab_width</span>(x, <span class="dv">2</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; x</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1.086, 3.086) [3.086, 5.086) [5.086, 7.086) [7.086, 9.086) [9.086, 11.09) </span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              1              4              2              2              1</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">tab_evenly</span>(x, <span class="dv">5</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; x</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1.086, 2.81)  [2.81, 4.535) [4.535, 6.259) [6.259, 7.983) [7.983, 9.708] </span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              1              2              2              2              3</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="fu">tab_mean_sd</span>(x)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; x</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [-2 sd, -1 sd)  [-1 sd, 0 sd)   [0 sd, 1 sd)   [1 sd, 2 sd) </span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              1              4              3              2</span></span></code></pre></div>
 <p>You can chop dates too:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">library</span>(lubridate)</span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="co">#&gt; </span></span>
-<span id="cb13-3"><a href="#cb13-3"></a><span class="co">#&gt; Attaching package: &#39;lubridate&#39;</span></span>
-<span id="cb13-4"><a href="#cb13-4"></a><span class="co">#&gt; The following objects are masked from &#39;package:base&#39;:</span></span>
-<span id="cb13-5"><a href="#cb13-5"></a><span class="co">#&gt; </span></span>
-<span id="cb13-6"><a href="#cb13-6"></a><span class="co">#&gt;     date, intersect, setdiff, union</span></span>
-<span id="cb13-7"><a href="#cb13-7"></a>y2k &lt;-<span class="st"> </span><span class="kw">as.Date</span>(<span class="st">&quot;2000-01-01&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="dv">0</span><span class="op">:</span><span class="dv">365</span></span>
-<span id="cb13-8"><a href="#cb13-8"></a>months &lt;-<span class="st"> </span><span class="kw">chop_width</span>(y2k, <span class="kw">months</span>(<span class="dv">1</span>))</span>
-<span id="cb13-9"><a href="#cb13-9"></a><span class="kw">table</span>(months)</span>
-<span id="cb13-10"><a href="#cb13-10"></a><span class="co">#&gt; months</span></span>
-<span id="cb13-11"><a href="#cb13-11"></a><span class="co">#&gt; [2000-01-01, 2000-02-01) [2000-02-01, 2000-03-01) [2000-03-01, 2000-04-01) </span></span>
-<span id="cb13-12"><a href="#cb13-12"></a><span class="co">#&gt;                       31                       29                       31 </span></span>
-<span id="cb13-13"><a href="#cb13-13"></a><span class="co">#&gt; [2000-04-01, 2000-05-01) [2000-05-01, 2000-06-01) [2000-06-01, 2000-07-01) </span></span>
-<span id="cb13-14"><a href="#cb13-14"></a><span class="co">#&gt;                       30                       31                       30 </span></span>
-<span id="cb13-15"><a href="#cb13-15"></a><span class="co">#&gt; [2000-07-01, 2000-08-01) [2000-08-01, 2000-09-01) [2000-09-01, 2000-10-01) </span></span>
-<span id="cb13-16"><a href="#cb13-16"></a><span class="co">#&gt;                       31                       31                       30 </span></span>
-<span id="cb13-17"><a href="#cb13-17"></a><span class="co">#&gt; [2000-10-01, 2000-11-01) [2000-11-01, 2000-12-01) [2000-12-01, 2001-01-01) </span></span>
-<span id="cb13-18"><a href="#cb13-18"></a><span class="co">#&gt;                       31                       30                       31</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Attaching package: &#39;lubridate&#39;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from &#39;package:base&#39;:</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     date, intersect, setdiff, union</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>y2k <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="st">&quot;2000-01-01&quot;</span>) <span class="sc">+</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">365</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>months <span class="ot">&lt;-</span> <span class="fu">chop_width</span>(y2k, <span class="fu">months</span>(<span class="dv">1</span>))</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(months)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; months</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2000-01-01, 2000-02-01) [2000-02-01, 2000-03-01) [2000-03-01, 2000-04-01) </span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                       31                       29                       31 </span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2000-04-01, 2000-05-01) [2000-05-01, 2000-06-01) [2000-06-01, 2000-07-01) </span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                       30                       31                       30 </span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2000-07-01, 2000-08-01) [2000-08-01, 2000-09-01) [2000-09-01, 2000-10-01) </span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                       31                       31                       30 </span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2000-10-01, 2000-11-01) [2000-11-01, 2000-12-01) [2000-12-01, 2001-01-01) </span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                       31                       30                       31</span></span></code></pre></div>
 </div>
 <div id="advanced-usage" class="section level1">
 <h1>Advanced usage</h1>
 <p>You can change factor labels with the <code>labels</code> argument:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>chopped &lt;-<span class="st"> </span><span class="kw">chop</span>(x, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">8</span>), <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Lowest&quot;</span>, <span class="st">&quot;Low&quot;</span>, <span class="st">&quot;Higher&quot;</span>, <span class="st">&quot;Highest&quot;</span>))</span>
-<span id="cb14-2"><a href="#cb14-2"></a><span class="kw">data.frame</span>(x, chopped)</span>
-<span id="cb14-3"><a href="#cb14-3"></a><span class="co">#&gt;           x chopped</span></span>
-<span id="cb14-4"><a href="#cb14-4"></a><span class="co">#&gt; 1  4.978305     Low</span></span>
-<span id="cb14-5"><a href="#cb14-5"></a><span class="co">#&gt; 2  8.969989 Highest</span></span>
-<span id="cb14-6"><a href="#cb14-6"></a><span class="co">#&gt; 3  3.391823     Low</span></span>
-<span id="cb14-7"><a href="#cb14-7"></a><span class="co">#&gt; 4  4.676785     Low</span></span>
-<span id="cb14-8"><a href="#cb14-8"></a><span class="co">#&gt; 5  7.057042  Higher</span></span>
-<span id="cb14-9"><a href="#cb14-9"></a><span class="co">#&gt; 6  9.707687 Highest</span></span>
-<span id="cb14-10"><a href="#cb14-10"></a><span class="co">#&gt; 7  6.713807  Higher</span></span>
-<span id="cb14-11"><a href="#cb14-11"></a><span class="co">#&gt; 8  8.376589 Highest</span></span>
-<span id="cb14-12"><a href="#cb14-12"></a><span class="co">#&gt; 9  1.086165  Lowest</span></span>
-<span id="cb14-13"><a href="#cb14-13"></a><span class="co">#&gt; 10 4.495479     Low</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>chopped <span class="ot">&lt;-</span> <span class="fu">chop</span>(x, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">8</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Lowest&quot;</span>, <span class="st">&quot;Low&quot;</span>, <span class="st">&quot;Higher&quot;</span>, <span class="st">&quot;Highest&quot;</span>))</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(x, chopped)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           x chopped</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  4.978305     Low</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  8.969989 Highest</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  3.391823     Low</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  4.676785     Low</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5  7.057042  Higher</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  9.707687 Highest</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7  6.713807  Higher</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8  8.376589 Highest</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9  1.086165  Lowest</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 4.495479     Low</span></span></code></pre></div>
 <p>You need as many labels as there are intervals - one fewer than <code>length(breaks)</code> if your data doesn’t extend beyond <code>breaks</code>, one more than <code>length(breaks)</code> if it does.</p>
 <p>To label intervals with a dash, use <code>lbl_dash()</code>:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>chopped &lt;-<span class="st"> </span><span class="kw">chop</span>(x, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">8</span>), <span class="kw">lbl_dash</span>())</span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="kw">data.frame</span>(x, chopped)</span>
-<span id="cb15-3"><a href="#cb15-3"></a><span class="co">#&gt;           x   chopped</span></span>
-<span id="cb15-4"><a href="#cb15-4"></a><span class="co">#&gt; 1  4.978305     2 - 5</span></span>
-<span id="cb15-5"><a href="#cb15-5"></a><span class="co">#&gt; 2  8.969989 8 - 9.708</span></span>
-<span id="cb15-6"><a href="#cb15-6"></a><span class="co">#&gt; 3  3.391823     2 - 5</span></span>
-<span id="cb15-7"><a href="#cb15-7"></a><span class="co">#&gt; 4  4.676785     2 - 5</span></span>
-<span id="cb15-8"><a href="#cb15-8"></a><span class="co">#&gt; 5  7.057042     5 - 8</span></span>
-<span id="cb15-9"><a href="#cb15-9"></a><span class="co">#&gt; 6  9.707687 8 - 9.708</span></span>
-<span id="cb15-10"><a href="#cb15-10"></a><span class="co">#&gt; 7  6.713807     5 - 8</span></span>
-<span id="cb15-11"><a href="#cb15-11"></a><span class="co">#&gt; 8  8.376589 8 - 9.708</span></span>
-<span id="cb15-12"><a href="#cb15-12"></a><span class="co">#&gt; 9  1.086165 1.086 - 2</span></span>
-<span id="cb15-13"><a href="#cb15-13"></a><span class="co">#&gt; 10 4.495479     2 - 5</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>chopped <span class="ot">&lt;-</span> <span class="fu">chop</span>(x, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">8</span>), <span class="fu">lbl_dash</span>())</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(x, chopped)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           x   chopped</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  4.978305     2 - 5</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  8.969989 8 - 9.708</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  3.391823     2 - 5</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  4.676785     2 - 5</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5  7.057042     5 - 8</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  9.707687 8 - 9.708</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7  6.713807     5 - 8</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8  8.376589 8 - 9.708</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9  1.086165 1.086 - 2</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 4.495479     2 - 5</span></span></code></pre></div>
 <p>To label intervals in order use <code>lbl_seq()</code>:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>chopped &lt;-<span class="st"> </span><span class="kw">chop</span>(x, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">8</span>), <span class="kw">lbl_seq</span>())</span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="kw">data.frame</span>(x, chopped)</span>
-<span id="cb16-3"><a href="#cb16-3"></a><span class="co">#&gt;           x chopped</span></span>
-<span id="cb16-4"><a href="#cb16-4"></a><span class="co">#&gt; 1  4.978305       b</span></span>
-<span id="cb16-5"><a href="#cb16-5"></a><span class="co">#&gt; 2  8.969989       d</span></span>
-<span id="cb16-6"><a href="#cb16-6"></a><span class="co">#&gt; 3  3.391823       b</span></span>
-<span id="cb16-7"><a href="#cb16-7"></a><span class="co">#&gt; 4  4.676785       b</span></span>
-<span id="cb16-8"><a href="#cb16-8"></a><span class="co">#&gt; 5  7.057042       c</span></span>
-<span id="cb16-9"><a href="#cb16-9"></a><span class="co">#&gt; 6  9.707687       d</span></span>
-<span id="cb16-10"><a href="#cb16-10"></a><span class="co">#&gt; 7  6.713807       c</span></span>
-<span id="cb16-11"><a href="#cb16-11"></a><span class="co">#&gt; 8  8.376589       d</span></span>
-<span id="cb16-12"><a href="#cb16-12"></a><span class="co">#&gt; 9  1.086165       a</span></span>
-<span id="cb16-13"><a href="#cb16-13"></a><span class="co">#&gt; 10 4.495479       b</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>chopped <span class="ot">&lt;-</span> <span class="fu">chop</span>(x, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">8</span>), <span class="fu">lbl_seq</span>())</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(x, chopped)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           x chopped</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  4.978305       b</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  8.969989       d</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  3.391823       b</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  4.676785       b</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5  7.057042       c</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  9.707687       d</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7  6.713807       c</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8  8.376589       d</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9  1.086165       a</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 4.495479       b</span></span></code></pre></div>
 <p>You can use numerals or even roman numerals:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw">chop</span>(x, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">8</span>), <span class="kw">lbl_seq</span>(<span class="st">&quot;(1)&quot;</span>))</span>
-<span id="cb17-2"><a href="#cb17-2"></a><span class="co">#&gt;  [1] (2) (4) (2) (2) (3) (4) (3) (4) (1) (2)</span></span>
-<span id="cb17-3"><a href="#cb17-3"></a><span class="co">#&gt; Levels: (1) (2) (3) (4)</span></span>
-<span id="cb17-4"><a href="#cb17-4"></a><span class="kw">chop</span>(x, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">8</span>), <span class="kw">lbl_seq</span>(<span class="st">&quot;i.&quot;</span>))</span>
-<span id="cb17-5"><a href="#cb17-5"></a><span class="co">#&gt;  [1] ii.  iv.  ii.  ii.  iii. iv.  iii. iv.  i.   ii. </span></span>
-<span id="cb17-6"><a href="#cb17-6"></a><span class="co">#&gt; Levels: i. ii. iii. iv.</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chop</span>(x, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">8</span>), <span class="fu">lbl_seq</span>(<span class="st">&quot;(1)&quot;</span>))</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] (2) (4) (2) (2) (3) (4) (3) (4) (1) (2)</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Levels: (1) (2) (3) (4)</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">chop</span>(x, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">8</span>), <span class="fu">lbl_seq</span>(<span class="st">&quot;i.&quot;</span>))</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] ii.  iv.  ii.  ii.  iii. iv.  iii. iv.  i.   ii. </span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Levels: i. ii. iii. iv.</span></span></code></pre></div>
 <p>For arbitrary formatting use <code>lbl_format()</code> and <code>sprintf</code>-style format strings:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>chopped &lt;-<span class="st"> </span><span class="kw">chop</span>(x, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">8</span>), <span class="kw">lbl_format</span>(<span class="st">&quot;%s to %s&quot;</span>))</span>
-<span id="cb18-2"><a href="#cb18-2"></a><span class="kw">data.frame</span>(x, chopped)</span>
-<span id="cb18-3"><a href="#cb18-3"></a><span class="co">#&gt;           x               chopped</span></span>
-<span id="cb18-4"><a href="#cb18-4"></a><span class="co">#&gt; 1  4.978305                2 to 5</span></span>
-<span id="cb18-5"><a href="#cb18-5"></a><span class="co">#&gt; 2  8.969989 8 to 9.70768669154495</span></span>
-<span id="cb18-6"><a href="#cb18-6"></a><span class="co">#&gt; 3  3.391823                2 to 5</span></span>
-<span id="cb18-7"><a href="#cb18-7"></a><span class="co">#&gt; 4  4.676785                2 to 5</span></span>
-<span id="cb18-8"><a href="#cb18-8"></a><span class="co">#&gt; 5  7.057042                5 to 8</span></span>
-<span id="cb18-9"><a href="#cb18-9"></a><span class="co">#&gt; 6  9.707687 8 to 9.70768669154495</span></span>
-<span id="cb18-10"><a href="#cb18-10"></a><span class="co">#&gt; 7  6.713807                5 to 8</span></span>
-<span id="cb18-11"><a href="#cb18-11"></a><span class="co">#&gt; 8  8.376589 8 to 9.70768669154495</span></span>
-<span id="cb18-12"><a href="#cb18-12"></a><span class="co">#&gt; 9  1.086165 1.08616470126435 to 2</span></span>
-<span id="cb18-13"><a href="#cb18-13"></a><span class="co">#&gt; 10 4.495479                2 to 5</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>chopped <span class="ot">&lt;-</span> <span class="fu">chop</span>(x, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">8</span>), <span class="fu">lbl_format</span>(<span class="st">&quot;%s to %s&quot;</span>))</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(x, chopped)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           x               chopped</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  4.978305                2 to 5</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  8.969989 8 to 9.70768669154495</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  3.391823                2 to 5</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  4.676785                2 to 5</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5  7.057042                5 to 8</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  9.707687 8 to 9.70768669154495</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7  6.713807                5 to 8</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8  8.376589 8 to 9.70768669154495</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9  1.086165 1.08616470126435 to 2</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 4.495479                2 to 5</span></span></code></pre></div>
 <p>Or use a formatter from the <code>{scales}</code> package:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">library</span>(scales)</span>
-<span id="cb19-2"><a href="#cb19-2"></a><span class="co">#&gt; </span></span>
-<span id="cb19-3"><a href="#cb19-3"></a><span class="co">#&gt; Attaching package: &#39;scales&#39;</span></span>
-<span id="cb19-4"><a href="#cb19-4"></a><span class="co">#&gt; The following object is masked from &#39;package:santoku&#39;:</span></span>
-<span id="cb19-5"><a href="#cb19-5"></a><span class="co">#&gt; </span></span>
-<span id="cb19-6"><a href="#cb19-6"></a><span class="co">#&gt;     percent</span></span>
-<span id="cb19-7"><a href="#cb19-7"></a>r &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>)</span>
-<span id="cb19-8"><a href="#cb19-8"></a>chopped &lt;-<span class="st"> </span><span class="kw">chop</span>(r, <span class="kw">c</span>(.<span class="dv">3</span>, <span class="fl">.5</span>, <span class="fl">.7</span>), <span class="kw">lbl_intervals</span>(<span class="dt">fmt =</span> <span class="kw">label_percent</span>(<span class="fl">0.1</span>)))</span>
-<span id="cb19-9"><a href="#cb19-9"></a><span class="kw">data.frame</span>(r, chopped)</span>
-<span id="cb19-10"><a href="#cb19-10"></a><span class="co">#&gt;             r        chopped</span></span>
-<span id="cb19-11"><a href="#cb19-11"></a><span class="co">#&gt; 1  0.75792242 [70.0%, 98.4%]</span></span>
-<span id="cb19-12"><a href="#cb19-12"></a><span class="co">#&gt; 2  0.48151959 [30.0%, 50.0%)</span></span>
-<span id="cb19-13"><a href="#cb19-13"></a><span class="co">#&gt; 3  0.50041493 [50.0%, 70.0%)</span></span>
-<span id="cb19-14"><a href="#cb19-14"></a><span class="co">#&gt; 4  0.22192945  [5.7%, 30.0%)</span></span>
-<span id="cb19-15"><a href="#cb19-15"></a><span class="co">#&gt; 5  0.98363107 [70.0%, 98.4%]</span></span>
-<span id="cb19-16"><a href="#cb19-16"></a><span class="co">#&gt; 6  0.13919834  [5.7%, 30.0%)</span></span>
-<span id="cb19-17"><a href="#cb19-17"></a><span class="co">#&gt; 7  0.36513696 [30.0%, 50.0%)</span></span>
-<span id="cb19-18"><a href="#cb19-18"></a><span class="co">#&gt; 8  0.48477647 [30.0%, 50.0%)</span></span>
-<span id="cb19-19"><a href="#cb19-19"></a><span class="co">#&gt; 9  0.05707588  [5.7%, 30.0%)</span></span>
-<span id="cb19-20"><a href="#cb19-20"></a><span class="co">#&gt; 10 0.70421678 [70.0%, 98.4%]</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Attaching package: &#39;scales&#39;</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following object is masked from &#39;package:santoku&#39;:</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     percent</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">10</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>chopped <span class="ot">&lt;-</span> <span class="fu">chop</span>(r, <span class="fu">c</span>(.<span class="dv">3</span>, .<span class="dv">5</span>, .<span class="dv">7</span>), <span class="fu">lbl_intervals</span>(<span class="at">fmt =</span> <span class="fu">label_percent</span>(<span class="fl">0.1</span>)))</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(r, chopped)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             r        chopped</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  0.75792242 [70.0%, 98.4%]</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  0.48151959 [30.0%, 50.0%)</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  0.50041493 [50.0%, 70.0%)</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  0.22192945  [5.7%, 30.0%)</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5  0.98363107 [70.0%, 98.4%]</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  0.13919834  [5.7%, 30.0%)</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7  0.36513696 [30.0%, 50.0%)</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8  0.48477647 [30.0%, 50.0%)</span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9  0.05707588  [5.7%, 30.0%)</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 0.70421678 [70.0%, 98.4%]</span></span></code></pre></div>
 <p>By default, <code>chop()</code> extends <code>breaks</code> if necessary. If you don’t want that, set <code>extend = FALSE</code>:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>chopped &lt;-<span class="st"> </span><span class="kw">chop</span>(x, <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>), <span class="dt">extend =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb20-2"><a href="#cb20-2"></a><span class="kw">data.frame</span>(x, chopped)</span>
-<span id="cb20-3"><a href="#cb20-3"></a><span class="co">#&gt;           x chopped</span></span>
-<span id="cb20-4"><a href="#cb20-4"></a><span class="co">#&gt; 1  4.978305  [3, 5)</span></span>
-<span id="cb20-5"><a href="#cb20-5"></a><span class="co">#&gt; 2  8.969989    &lt;NA&gt;</span></span>
-<span id="cb20-6"><a href="#cb20-6"></a><span class="co">#&gt; 3  3.391823  [3, 5)</span></span>
-<span id="cb20-7"><a href="#cb20-7"></a><span class="co">#&gt; 4  4.676785  [3, 5)</span></span>
-<span id="cb20-8"><a href="#cb20-8"></a><span class="co">#&gt; 5  7.057042    &lt;NA&gt;</span></span>
-<span id="cb20-9"><a href="#cb20-9"></a><span class="co">#&gt; 6  9.707687    &lt;NA&gt;</span></span>
-<span id="cb20-10"><a href="#cb20-10"></a><span class="co">#&gt; 7  6.713807  [5, 7)</span></span>
-<span id="cb20-11"><a href="#cb20-11"></a><span class="co">#&gt; 8  8.376589    &lt;NA&gt;</span></span>
-<span id="cb20-12"><a href="#cb20-12"></a><span class="co">#&gt; 9  1.086165    &lt;NA&gt;</span></span>
-<span id="cb20-13"><a href="#cb20-13"></a><span class="co">#&gt; 10 4.495479  [3, 5)</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>chopped <span class="ot">&lt;-</span> <span class="fu">chop</span>(x, <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>), <span class="at">extend =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(x, chopped)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           x chopped</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  4.978305  [3, 5)</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  8.969989    &lt;NA&gt;</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  3.391823  [3, 5)</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  4.676785  [3, 5)</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5  7.057042    &lt;NA&gt;</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  9.707687    &lt;NA&gt;</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7  6.713807  [5, 7)</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8  8.376589    &lt;NA&gt;</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9  1.086165    &lt;NA&gt;</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 4.495479  [3, 5)</span></span></code></pre></div>
 <p>Data outside the range of <code>breaks</code> will become <code>NA</code>.</p>
 <p>By default, intervals are closed on the left, i.e. they include their left endpoints. If you want right-closed intervals, set <code>left = FALSE</code>:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>y &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">5</span></span>
-<span id="cb21-2"><a href="#cb21-2"></a><span class="kw">data.frame</span>(</span>
-<span id="cb21-3"><a href="#cb21-3"></a>        <span class="dt">y =</span> y, </span>
-<span id="cb21-4"><a href="#cb21-4"></a>        <span class="dt">left_closed =</span> <span class="kw">chop</span>(y, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>), </span>
-<span id="cb21-5"><a href="#cb21-5"></a>        <span class="dt">right_closed =</span> <span class="kw">chop</span>(y, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">left =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb21-6"><a href="#cb21-6"></a>      )</span>
-<span id="cb21-7"><a href="#cb21-7"></a><span class="co">#&gt;   y left_closed right_closed</span></span>
-<span id="cb21-8"><a href="#cb21-8"></a><span class="co">#&gt; 1 1      [1, 2)          {1}</span></span>
-<span id="cb21-9"><a href="#cb21-9"></a><span class="co">#&gt; 2 2      [2, 3)       (1, 2]</span></span>
-<span id="cb21-10"><a href="#cb21-10"></a><span class="co">#&gt; 3 3      [3, 4)       (2, 3]</span></span>
-<span id="cb21-11"><a href="#cb21-11"></a><span class="co">#&gt; 4 4      [4, 5)       (3, 4]</span></span>
-<span id="cb21-12"><a href="#cb21-12"></a><span class="co">#&gt; 5 5         {5}       (4, 5]</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> y, </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">left_closed =</span> <span class="fu">chop</span>(y, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>), </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">right_closed =</span> <span class="fu">chop</span>(y, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">left =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   y left_closed right_closed</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 1      [1, 2)          {1}</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 2      [2, 3)       (1, 2]</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 3      [3, 4)       (2, 3]</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 4      [4, 5)       (3, 4]</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 5         {5}       (4, 5]</span></span></code></pre></div>
 <p>If you want to close off the last interval, set <code>close_end = TRUE</code>:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">data.frame</span>(</span>
-<span id="cb22-2"><a href="#cb22-2"></a>  <span class="dt">y =</span> y,</span>
-<span id="cb22-3"><a href="#cb22-3"></a>  <span class="dt">rightmost_open =</span> <span class="kw">chop</span>(y, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>),</span>
-<span id="cb22-4"><a href="#cb22-4"></a>  <span class="dt">rightmost_closed   =</span> <span class="kw">chop</span>(y, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">close_end =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb22-5"><a href="#cb22-5"></a>)</span>
-<span id="cb22-6"><a href="#cb22-6"></a><span class="co">#&gt;   y rightmost_open rightmost_closed</span></span>
-<span id="cb22-7"><a href="#cb22-7"></a><span class="co">#&gt; 1 1         [1, 2)           [1, 2)</span></span>
-<span id="cb22-8"><a href="#cb22-8"></a><span class="co">#&gt; 2 2         [2, 3)           [2, 3)</span></span>
-<span id="cb22-9"><a href="#cb22-9"></a><span class="co">#&gt; 3 3         [3, 4)           [3, 4)</span></span>
-<span id="cb22-10"><a href="#cb22-10"></a><span class="co">#&gt; 4 4         [4, 5)           [4, 5]</span></span>
-<span id="cb22-11"><a href="#cb22-11"></a><span class="co">#&gt; 5 5            {5}           [4, 5]</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> y,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">rightmost_open =</span> <span class="fu">chop</span>(y, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>),</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rightmost_closed   =</span> <span class="fu">chop</span>(y, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">close_end =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   y rightmost_open rightmost_closed</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 1         [1, 2)           [1, 2)</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 2         [2, 3)           [2, 3)</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 3         [3, 4)           [3, 4)</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 4         [4, 5)           [4, 5]</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 5            {5}           [4, 5]</span></span></code></pre></div>
 </div>
 
 
