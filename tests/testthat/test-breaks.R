@@ -24,30 +24,6 @@ test_that("brk_manual", {
 })
 
 
-test_that("brk_left, brk_right", {
-  expect_identical(
-          brk_res(brk_left(1:3)),
-          santoku:::create_breaks(1:3, c(TRUE, TRUE, TRUE))
-        )
-  expect_identical(
-          brk_res(brk_left(1:3), close_end = TRUE),
-          santoku:::create_breaks(1:3, c(TRUE, TRUE, FALSE))
-        )
-  expect_identical(
-          brk_res(brk_right(1:3)),
-          santoku:::create_breaks(1:3, c(FALSE, FALSE, FALSE))
-        )
-  expect_identical(
-          brk_res(brk_right(1:3), close_end = TRUE),
-          santoku:::create_breaks(1:3, c(TRUE, FALSE, FALSE))
-        )
-
-  expect_false(
-    anyNA(chop(1:5, brk_left(1:5)))
-  )
-})
-
-
 test_that("brk_n", {
   for (i in 1:10) {
     x <- rnorm(sample(10:20, 1L))
@@ -107,15 +83,20 @@ test_that("brk_evenly", {
 
 test_that("brk_mean_sd", {
   x <- rnorm(100)
-  expect_silent(b <- brk_res(brk_mean_sd(3), x = x))
+  expect_silent(b <- brk_res(brk_mean_sd(1:3), x = x))
   m <- mean(x)
   sd <- sd(x)
   sd_ints <- seq(m - 3 * sd, m + 3 * sd, sd)
   expect_equal(as.numeric(b), sd_ints)
 
-  expect_silent(brk_res(brk_mean_sd(3), x = rep(NA, 2)))
-  expect_silent(brk_res(brk_mean_sd(3), x = rep(1, 3)))
-  expect_silent(brk_res(brk_mean_sd(3), x = 1))
+  expect_silent(brk_res(brk_mean_sd(1:3), x = rep(NA, 2)))
+  expect_silent(brk_res(brk_mean_sd(1:3), x = rep(1, 3)))
+  expect_silent(brk_res(brk_mean_sd(1:3), x = 1))
+
+  lifecycle::expect_deprecated(res <- brk_res(brk_mean_sd(sd = 3)))
+  expect_equivalent(
+    res, brk_res(brk_mean_sd(1:3))
+  )
 })
 
 
@@ -145,10 +126,10 @@ test_that("brk_equally", {
 
 
 test_that("printing", {
-  b <- brk_left(1:3)
+  b <- brk_default(1:3)
   expect_output(print(b))
   expect_silent(format(b))
-  b_empty <- brk_left(1)
+  b_empty <- brk_default(1)
   expect_output(print(b_empty))
 })
 

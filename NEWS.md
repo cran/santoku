@@ -1,3 +1,45 @@
+# santoku 0.7.0
+
+## Breaking changes
+
+* In labelling functions, `first` and `last` arguments are now passed to 
+  `glue::glue()`. Variables `l` and `r` represent the left and right endpoints 
+  of the intervals. 
+* `chop_mean_sd()` now takes a vector `sds` of standard deviations, rather than
+  a single maximum number `sd` of standard deviations. Write e.g. 
+  `chop_mean_sd(sds = 1:3)` rather than `chop_mean_sd(sd = 3)`. The `sd` argument
+  is deprecated.
+* The `groups` argument to `chop_evenly()`,  deprecated in 0.4.0, has 
+  been removed.
+* `brk_left()` and `brk_right()`, deprecated in 0.4.0, have been removed.
+* `knife()`, deprecated in 0.4.0, has been removed.
+* `lbl_format()`, questioning since 0.4.0, has been removed.
+* Arguments of `lbl_dash()` and `lbl_intervals()` have been reordered for
+  consistency with other labelling functions.
+
+## Other changes
+
+* You can now chop many more types, including `units` from the `units` package,
+  `difftime` objects, `package_version` objects, etc. 
+  - Character vectors will be chopped by lexicographic order, with an optional warning.
+  - If you have problems chopping a vector type, file a bug report.
+* The `{glue}` package has become a hard dependency. It is used in many places to 
+  format labels. 
+* There is a new `lbl_glue()` function using the `{glue}` package. Thanks to @dpprdan.
+* You can now set `labels = NULL` to return integer codes.
+* Arguments `first`, `last` and `single` can be used in `lbl_intervals()` 
+  and `lbl_dash()`, to override the first and last interval labels, or to 
+  label singleton intervals.
+* `lbl_dash()` and `lbl_discrete()` use unicode em-dash where possible.
+* `brk_default()` throws an error if breaks are not sorted.
+
+  
+## Bugfixes
+
+* Bugfix: `tab()` and friends no longer display an `x` as the variable name.
+* Bugfix: `lbl_endpoint()` was erroring for some types of breaks.
+
+
 
 # santoku 0.6.0
 

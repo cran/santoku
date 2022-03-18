@@ -95,7 +95,7 @@ needs_extend <- function (breaks, x, extend) {
           (! left[1] && min_x == min(breaks))
         ) {
     # "... and if ..."
-    if (breaks[1] > -Inf || ! left[1]) {
+    if (is_gt_minus_inf(breaks[1]) || ! left[1]) {
       needs <- needs | LEFT
     }
   }
@@ -105,7 +105,7 @@ needs_extend <- function (breaks, x, extend) {
           max_x > max(breaks) ||
           (left[length(left)] && max_x == max(breaks))
         ) {
-    if (breaks[length(breaks)] < Inf || left[length(left)]) {
+    if (is_lt_inf(breaks[length(breaks)]) || left[length(left)]) {
       needs <- needs | RIGHT
     }
   }
@@ -139,7 +139,7 @@ extend_endpoint_left <- function (breaks, x, extend) {
   left <- attr(breaks, "left")
   q <- quiet_min(x)
   # non-finite q could be Inf if set is empty. Not appropriate for a left endpoint!
-  extra_break <- if (is.null(extend) && is.finite(q)) q else class_bounds(x)[1]
+  extra_break <- if (is.null(extend) && is_gt_minus_inf(q)) q else class_bounds(x)[1]
   breaks <- vctrs::vec_c(extra_break, unclass_breaks(breaks))
   breaks <- create_breaks(breaks, c(TRUE, left))
 
@@ -150,11 +150,27 @@ extend_endpoint_left <- function (breaks, x, extend) {
 extend_endpoint_right <- function (breaks, x, extend) {
   left <- attr(breaks, "left")
   q <- quiet_max(x)
-  extra_break <- if (is.null(extend) && is.finite(q)) q else class_bounds(x)[2]
+  extra_break <- if (is.null(extend) && is_lt_inf(q)) q else class_bounds(x)[2]
   breaks <- vctrs::vec_c(unclass_breaks(breaks), extra_break)
   breaks <- create_breaks(breaks, c(left, FALSE))
 
   breaks
+}
+
+
+is_lt_inf <- function (x) {
+  x <- tryCatch(strict_as_numeric(x),
+                  error = function (...) return(TRUE)
+                )
+  x < Inf
+}
+
+
+is_gt_minus_inf <- function (x) {
+  x <- tryCatch(strict_as_numeric(x),
+                  error = function (...) return(TRUE)
+                )
+  x > -Inf
 }
 
 
@@ -183,10 +199,23 @@ class_bounds.Date <- function (x) {
   as.Date(c(-Inf, Inf), origin = "1970-01-01")
 }
 
+
+#' @export
+class_bounds.integer64 <- function (x) {
+  bit64::lim.integer64()
+}
+
+
 #' @export
 class_bounds.default <- function (x) {
-  stop("Class '", paste(class(x), sep = "', '"),
-        "' has no natural endpoints for `extend = TRUE`")
+  tryCatch(
+    vctrs::vec_cast(c(-Inf, Inf), x),
+    error = function(...) {
+      warning("Class '", paste(class(x), collapse = "', '"),
+              "' has no natural endpoints corresponding to +/-Inf for `extend = TRUE`;")
+      c(quiet_min(x), quiet_max(x))
+    }
+  )
 }
 
 
@@ -207,6 +236,10 @@ unclass_breaks <- function (breaks) {
                    } else {
                      superclasses
                    }
+
+
+  # this helps vec_cast_common deal with unusual types of breaks
+  attr(breaks, "left") <- NULL
 
   breaks
 }

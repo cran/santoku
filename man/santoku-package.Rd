@@ -23,13 +23,13 @@ separate factor level for values exactly equal to 2.
 \item Convenience functions for creating quantile intervals, evenly-spaced
 intervals or equal-sized groups.
 \item Convenience functions to quickly tabulate chopped data.
-\item Can chop numbers, dates or date-times.
+\item Can chop numbers, dates, date-times and other objects.
 }
 
 These advantages make santoku especially useful for exploratory analysis,
 where you may not know the range of your data in advance.
 
-To get started, read the vignette:\if{html}{\out{<div class="r">}}\preformatted{vignette("santoku")
+To get started, read the vignette:\if{html}{\out{<div class="sourceCode r">}}\preformatted{vignette("santoku")
 }\if{html}{\out{</div>}}
 
 For more details, start with the documentation for \code{\link[=chop]{chop()}}.
@@ -45,5 +45,10 @@ Useful links:
 }
 \author{
 \strong{Maintainer}: David Hugh-Jones \email{davidhughjones@gmail.com}
+
+Other contributors:
+\itemize{
+  \item Daniel Possenriede \email{possenriede@gmail.com} [contributor]
+}
 
 }

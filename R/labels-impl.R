@@ -1,11 +1,11 @@
 
-endpoint_labels <- function (breaks, raw, fmt, ...) {
+endpoint_labels <- function (breaks, raw, fmt = NULL, ...) {
   UseMethod("endpoint_labels")
 }
 
 
 #' @export
-endpoint_labels.default <- function (breaks, raw, fmt = NULL, ...) {
+endpoint_labels.numeric <- function (breaks, raw, fmt = NULL, ...) {
   elabels <- scaled_endpoints(breaks, raw = raw)
 
   elabels <- if (! is.null(fmt)) {
@@ -19,11 +19,35 @@ endpoint_labels.default <- function (breaks, raw, fmt = NULL, ...) {
 
 
 #' @export
-endpoint_labels.Date <- function (breaks, raw, fmt = "%F") {
+endpoint_labels.integer <- endpoint_labels.numeric
+
+#' @export
+endpoint_labels.double <- endpoint_labels.numeric
+
+
+#' @export
+endpoint_labels.default <- function (breaks, raw, fmt = NULL, ...) {
+  elabels <- scaled_endpoints(breaks, raw = raw)
+
+  elabels <- if (! is.null(fmt)) {
+    apply_format(fmt, elabels)
+  } else {
+    base::format(elabels)
+  }
+
+  return(elabels)
+}
+
+
+#' @export
+endpoint_labels.Date <- function (breaks, raw, fmt = NULL) {
   elabels <- scaled_endpoints(breaks, raw = raw)
   # this could be a number. If so, a `fmt` for `sprintf`
   # will work fine:
   if (! inherits(elabels, "Date")) return(NextMethod())
+
+  # set default format
+  if (is.null(fmt)) fmt <- "%F"
 
   elabels_chr <- apply_format(fmt, elabels)
   minus_inf <- is.infinite(elabels) & elabels < as.Date("1970-01-01")
@@ -36,10 +60,13 @@ endpoint_labels.Date <- function (breaks, raw, fmt = "%F") {
 
 
 #' @export
-endpoint_labels.POSIXt <- function (breaks, raw, fmt = "%F %H:%M:%S") {
+endpoint_labels.POSIXt <- function (breaks, raw, fmt = NULL) {
   elabels <- scaled_endpoints(breaks, raw = raw)
   # same comment as endpoint_labels.Date above:
   if (! inherits(elabels, "POSIXt")) return(NextMethod())
+
+  # set default format
+  if (is.null(fmt)) fmt <- "%F %H:%M:%S"
 
   elabels_chr <- apply_format(fmt, elabels)
   minus_inf <- is.infinite(elabels) & elabels < as.POSIXct("1970-01-01")
@@ -52,8 +79,11 @@ endpoint_labels.POSIXt <- function (breaks, raw, fmt = "%F %H:%M:%S") {
 
 
 #' @export
-endpoint_labels.quantileBreaks <- function (breaks, raw, fmt = percent) {
+endpoint_labels.quantileBreaks <- function (breaks, raw, fmt = NULL) {
   if (raw) return(NextMethod())
+
+  # set default format
+  if (is.null(fmt)) fmt <- percent
 
   elabels <- scaled_endpoints(breaks, raw = FALSE)
   elabels <- apply_format(fmt, elabels)
@@ -63,8 +93,11 @@ endpoint_labels.quantileBreaks <- function (breaks, raw, fmt = percent) {
 
 
 #' @export
-endpoint_labels.sdBreaks <- function (breaks, raw, fmt = "%.3g sd") {
+endpoint_labels.sdBreaks <- function (breaks, raw, fmt = NULL) {
   if (raw) return(NextMethod())
+
+  # set default format
+  if (is.null(fmt)) fmt <- "%.3g sd"
 
   elabels <- scaled_endpoints(breaks, raw = FALSE)
   elabels <- apply_format(fmt, elabels)
@@ -126,16 +159,14 @@ apply_format.character <- function (fmt, endpoint, ...) {
 #' @export
 #' @method apply_format.character default
 apply_format.character.default <- function (fmt, endpoint, ...) {
-  format(endpoint, fmt, ...)
+  base::format(endpoint, fmt, ...)
 }
 
 
 #' @export
 #' @method apply_format.character numeric
 apply_format.character.numeric <- function (fmt, endpoint, ...) {
-  # suppressWarnings avoids "One argument not used" for first/last labels
-  # in lbl_dash()
-  suppressWarnings(sprintf(fmt, endpoint, ...))
+  sprintf(fmt, endpoint, ...)
 }
 
 
@@ -164,14 +195,15 @@ unique_truncation <- function (num) {
                                    # we keep the first of each duplicate set.
 
   for (digits in seq(4L, 22L)) {
-    res <- formatC(num, digits = digits, width = -1)
-    if (anyDuplicated(res[want_unique]) == 0L) break
+    res <- formatC(num, digits = digits, width = -1L)
+    if (anyDuplicated(res[want_unique]) == 0L) return(res)
   }
 
-  if (anyDuplicated(res[want_unique]) > 0L) {
-    stop("Could not format breaks to avoid duplicates")
-  }
+  stop("Could not format breaks to avoid duplicates")
+}
 
-  return(res)
+
+em_dash <- function() {
+  if (l10n_info()[["UTF-8"]]) "\u2014" else "-"
 }
 

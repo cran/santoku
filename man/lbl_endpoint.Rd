@@ -7,21 +7,32 @@
 lbl_endpoint(fmt = NULL, raw = FALSE, left = TRUE)
 }
 \arguments{
-\item{fmt}{A format. Can be a string, passed into \code{\link[base:sprintf]{base::sprintf()}} or \code{\link[=format]{format()}}
-methods; or a one-argument formatting function.}
+\item{fmt}{String or function. A format for break endpoints.}
 
-\item{raw}{Logical. Always use raw \code{breaks} in labels, rather than e.g. quantiles
-or standard deviations?}
+\item{raw}{Logical. Always use raw \code{breaks} in labels, rather than e.g.
+quantiles or standard deviations?}
 
 \item{left}{Flag. Use left endpoint or right endpoint?}
 }
 \value{
-A vector of labels for \code{chop}, or a function that creates labels.
+A function that creates a vector of labels.
 }
 \description{
 This is useful when the left endpoint unambiguously indicates the
-interval.
+interval. In other cases it may give errors due to duplicate labels.
 }
+\section{Formatting endpoints}{
+
+
+If \code{fmt} is not \code{NULL} then it is used to format the endpoints. If \code{fmt} is a
+string then numeric endpoints will be formatted by \code{sprintf(fmt, breaks)};
+other endpoints, e.g. Date objects, will be formatted by \code{format(breaks, fmt)}.
+
+If \code{fmt} is a function, it should take a vector of numbers (or other objects
+that can be used as breaks) and return a character vector. It may be helpful
+to use functions from the \code{{scales}} package, e.g. \code{\link[scales:label_number]{scales::label_comma()}}.
+}
+
 \examples{
 chop(1:10, c(2, 5, 8), lbl_endpoint(left = TRUE))
 chop(1:10, c(2, 5, 8), lbl_endpoint(left = FALSE))

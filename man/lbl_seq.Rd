@@ -9,8 +9,11 @@ lbl_seq(start = "a")
 \arguments{
 \item{start}{String. A template for the sequence. See below.}
 }
+\value{
+A function that creates a vector of labels.
+}
 \description{
-\code{lbl_seq} labels intervals sequentially, using numbers or letters.
+\code{lbl_seq()} labels intervals sequentially, using numbers or letters.
 }
 \details{
 \code{start} shows the first element of the sequence. It must contain exactly \emph{one}
@@ -36,7 +39,7 @@ chop(1:10, c(2, 5, 8), lbl_seq("(A)"))
 Other labelling functions: 
 \code{\link{lbl_dash}()},
 \code{\link{lbl_discrete}()},
-\code{\link{lbl_format}()},
+\code{\link{lbl_glue}()},
 \code{\link{lbl_intervals}()},
 \code{\link{lbl_manual}()}
 }

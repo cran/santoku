@@ -4,47 +4,72 @@
 \alias{lbl_discrete}
 \title{Label discrete data}
 \usage{
-lbl_discrete(symbol = " - ", fmt = NULL, first = NULL, last = NULL)
+lbl_discrete(
+  symbol = em_dash(),
+  unit = 1,
+  fmt = NULL,
+  first = NULL,
+  last = NULL
+)
 }
 \arguments{
 \item{symbol}{String: symbol to use for the dash.}
 
-\item{fmt}{A format. Can be a string, passed into \code{\link[base:sprintf]{base::sprintf()}} or \code{\link[=format]{format()}}
-methods; or a one-argument formatting function.}
+\item{unit}{Minimum difference between distinct values of data.
+For integers, 1.}
 
-\item{first}{String: override label for the first category.}
+\item{fmt}{String or function. A format for break endpoints.}
 
-\item{last}{String: override label for the last category.}
+\item{first}{Glue string: override label for the first category. Write e.g.
+\code{first = "<{r}"} to create a label like \code{"<18"}. See \code{\link[=lbl_glue]{lbl_glue()}}
+for details.}
+
+\item{last}{String: override label for the last category. Write e.g.
+\code{last = ">{l}"} to create a label like \code{">65"}. See \code{\link[=lbl_glue]{lbl_glue()}}
+for details.}
 }
 \value{
-A vector of labels for \code{chop}, or a function that creates labels.
+A function that creates a vector of labels.
 }
 \description{
-\lifecycle{experimental}
+\code{lbl_discrete()} creates labels for discrete data, such as integers.
+For example, breaks
+\code{c(1, 3, 4, 6, 7)} are labelled: \verb{"1-2", "3", "4-5", "6-7"}.
 }
 \details{
-\code{lbl_discrete} creates labels for discrete data such as integers.
-For example, breaks
-\code{c(1, 3, 4, 6, 7)} are labelled: \verb{"1 - 2", "3", "4 - 5", "6 - 7"}.
-
-No check is done that the data is discrete-valued. If it isn't, then
+No check is done that the data are discrete-valued. If they are not, then
 these labels may be misleading. Here, discrete-valued means that if
-\code{x < y}, then \code{x <= y - 1}.
+\code{x < y}, then \code{x <= y - unit}.
 
 Be aware that Date objects may have non-integer values. See \link{Date}.
 }
+\section{Formatting endpoints}{
+
+
+If \code{fmt} is not \code{NULL} then it is used to format the endpoints. If \code{fmt} is a
+string then numeric endpoints will be formatted by \code{sprintf(fmt, breaks)};
+other endpoints, e.g. Date objects, will be formatted by \code{format(breaks, fmt)}.
+
+If \code{fmt} is a function, it should take a vector of numbers (or other objects
+that can be used as breaks) and return a character vector. It may be helpful
+to use functions from the \code{{scales}} package, e.g. \code{\link[scales:label_number]{scales::label_comma()}}.
+}
+
 \examples{
 tab(1:7, c(1, 3, 5), lbl_discrete())
 
-tab(1:7, c(3, 5), lbl_discrete(first = "<= \%s"))
+tab(1:7, c(3, 5), lbl_discrete(first = "<= {r}"))
+
+tab(1:7 * 1000, c(1, 3, 5) * 1000, lbl_discrete(unit = 1000))
 
 # Misleading labels for non-integer data
 chop(2.5, c(1, 3, 5), lbl_discrete())
+
 }
 \seealso{
 Other labelling functions: 
 \code{\link{lbl_dash}()},
-\code{\link{lbl_format}()},
+\code{\link{lbl_glue}()},
 \code{\link{lbl_intervals}()},
 \code{\link{lbl_manual}()},
 \code{\link{lbl_seq}()}

@@ -9,17 +9,28 @@ lbl_manual(sequence, fmt = "\%s")
 \arguments{
 \item{sequence}{A character vector of labels.}
 
-\item{fmt}{A format. Can be a string, passed into \code{\link[base:sprintf]{base::sprintf()}} or \code{\link[=format]{format()}}
-methods; or a one-argument formatting function.}
+\item{fmt}{String or function. A format for break endpoints.}
 }
 \value{
-A vector of labels for \code{chop}, or a function that creates labels.
+A function that creates a vector of labels.
 }
 \description{
 \code{lbl_manual()} uses an arbitrary sequence to label
 intervals. If the sequence is too short, it will be pasted with itself and
 repeated.
 }
+\section{Formatting endpoints}{
+
+
+If \code{fmt} is not \code{NULL} then it is used to format the endpoints. If \code{fmt} is a
+string then numeric endpoints will be formatted by \code{sprintf(fmt, breaks)};
+other endpoints, e.g. Date objects, will be formatted by \code{format(breaks, fmt)}.
+
+If \code{fmt} is a function, it should take a vector of numbers (or other objects
+that can be used as breaks) and return a character vector. It may be helpful
+to use functions from the \code{{scales}} package, e.g. \code{\link[scales:label_number]{scales::label_comma()}}.
+}
+
 \examples{
 chop(1:10, c(2, 5, 8), lbl_manual(c("w", "x", "y", "z")))
 
@@ -30,7 +41,7 @@ chop(1:10, 1:10, lbl_manual(c("x", "y", "z")))
 Other labelling functions: 
 \code{\link{lbl_dash}()},
 \code{\link{lbl_discrete}()},
-\code{\link{lbl_format}()},
+\code{\link{lbl_glue}()},
 \code{\link{lbl_intervals}()},
 \code{\link{lbl_seq}()}
 }

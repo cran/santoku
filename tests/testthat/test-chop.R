@@ -27,16 +27,16 @@ test_that("NA, NaN and Inf", {
 
   x <- c(-Inf, 1, Inf)
   # if extend is NULL, we should ensure even Inf is included
-  r <- chop(x, brk_right(-Inf), labels = c("-Inf", "a"))
+  r <- chop(x, -Inf, left = FALSE, labels = c("-Inf", "a"))
   expect_equivalent(r, factor(c("-Inf", "a", "a"), levels = c("-Inf", "a")))
-  r <- chop(x, brk_left(Inf), labels = c("a", "Inf"))
+  r <- chop(x, Inf, labels = c("a", "Inf"))
   expect_equivalent(r, factor(c("a", "a", "Inf"), levels = c("a", "Inf")))
 
   # otherwise, we respect close_end = FALSE
-  r <- chop(x, brk_right(c(-Inf, Inf)), labels = "a",
-        extend = FALSE)
+  r <- chop(x, brk_default(c(-Inf, Inf)), labels = "a",
+        extend = FALSE, left = FALSE)
   expect_equivalent(r, factor(c(NA, "a", "a"), levels = "a"))
-  r <- chop(x, brk_left(c(-Inf, Inf)), labels = "a", extend = FALSE)
+  r <- chop(x, c(-Inf, Inf), labels = "a", extend = FALSE)
   expect_equivalent(r, factor(c("a", "a", NA), levels = "a"))
 
   all_na <- rep(NA_real_, 5)
@@ -66,6 +66,11 @@ test_that("labels", {
   expect_error(chop(1:10, 3:4, labels = c("a", "a", "a")))
   expect_error(chop(1:10, 3:4, labels = c("a", "b")))
   expect_error(chop(1:10, 3:4, labels = c("a", "b", "c", "d")))
+
+  expect_equivalent(
+          chop(x, 1:2, labels = NULL),
+          c(1, 2, 2, 3, 3)
+        )
 })
 
 
@@ -116,8 +121,7 @@ test_that("chop_evenly", {
     chop_evenly(x, 2, labels = lbl_seq("1")),
     factor(rep(1:2, each = 5))
   )
-  expect_warning(r <- chop_evenly(x, groups = 2))
-  expect_identical(r, chop_evenly(x, intervals = 2))
+  expect_error(r <- chop_evenly(x, groups = 2))
 })
 
 
@@ -158,9 +162,12 @@ test_that("chop_n", {
 
 test_that("chop_mean_sd", {
   x <- -1:1 # mean 0, sd 1
-  expect_silent(chop_mean_sd(x))
-  expect_silent(chop_mean_sd(x, sd = 2))
-  expect_silent(chop_mean_sd(x, sd = 1.96))
+  expect_silent(res <- chop_mean_sd(x))
+  expect_equivalent(as.vector(table(res)), c(1, 1, 1))
+  expect_silent(res2 <- chop_mean_sd(x, sds = 1:2))
+  expect_silent(chop_mean_sd(x, sds = c(1, 1.96)))
+  lifecycle::expect_deprecated(res3 <- chop_mean_sd(x, sd = 2))
+  expect_equivalent(res2, res3)
 })
 
 

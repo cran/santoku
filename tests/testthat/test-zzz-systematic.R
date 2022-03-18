@@ -22,7 +22,7 @@ test_that("systematic tests", {
     brk_manual      = brk_manual(1:3, rep(TRUE, 3)),
     brk_manual2     = brk_manual(1:3, c(FALSE, TRUE, FALSE)),
     brk_mean_sd     = brk_mean_sd(),
-    brk_mean_sd2    = brk_mean_sd(1.96),
+    brk_mean_sd2    = brk_mean_sd(c(1, 1.96)),
     brk_n           = brk_n(5),
     brk_quantiles   = brk_quantiles(1:3/4),
     brk_default     = brk_default(1:3),
@@ -39,15 +39,13 @@ test_that("systematic tests", {
   lbl_funs <- list(
     lbl_dash          = lbl_dash(),
     lbl_dash2         = lbl_dash("/"),
-    lbl_format        = lbl_format("%s to %s"),
-    lbl_format2       = lbl_format("%s to %s", "%s..."),
-    lbl_format_raw    = lbl_format("%s to %s", raw = TRUE),
     lbl_intervals     = lbl_intervals(),
     lbl_intervals_raw = lbl_intervals(raw = TRUE),
     lbl_seq           = lbl_seq("a"),
     lbl_seq2          = lbl_seq("(i)"),
     lbl_manual        = lbl_manual(letters[1:2]),
-    lbl_manual2       = lbl_manual(letters[1:2], "%s)")
+    lbl_manual2       = lbl_manual(letters[1:2], "%s)"),
+    lbl_endpoint      = lbl_endpoint()
   )
 
   test_df <- expand.grid(
@@ -72,10 +70,6 @@ test_that("systematic tests", {
   skip_test(! left & brk_fun == "brk_manual2")
   skip_test(close_end & brk_fun == "brk_manual")
   skip_test(close_end & brk_fun == "brk_manual2")
-  skip_test(! left & brk_fun == "brk_left")
-  skip_test(left & brk_fun == "brk_right")
-  skip_test(names(x) == "Date" & grepl("lbl_format", lbl_fun))
-  skip_test(names(x) == "POSIXct" & grepl("lbl_format", lbl_fun))
 
   POSIXct_breaks <- c("brk_def_POSIXct", "brk_w_difft_sec")
   Date_breaks <- c("brk_def_Date", "brk_w_difft_day")
@@ -89,20 +83,50 @@ test_that("systematic tests", {
   should_fail <-   function (cond) test_df$expect[cond] <<- "error"
   should_warn <-   function (cond) test_df$expect[cond] <<- "warn"
   should_either <- function (cond) test_df$expect[cond] <<- "either"
-  dont_care <-     function (cond) test_df$expect[cond] <<- NA_character_
+  dont_care <-     function (cond) test_df <<- test_df[! cond, ]
 
   should_fail(names(test_df$x) == "char")
+
+  # but if we break by quantities, OK:
+  should_warn(names(test_df$x) == "char" &
+          test_df$brk_fun %in% c("brk_equally", "brk_quantiles", "brk_n")
+        )
+
+  # all quantiles will be the same here, so no way to create
+  # intervals if extend is FALSE
   should_fail(with(test_df,
           names(x) %in% c("same", "one") &
           brk_fun == "brk_quantiles" &
           extend == FALSE
         ))
+
+  # brk_default_hi and _lo have a single break, so if you can't
+  # extend it, there are no possible intervals:
   should_fail(with(test_df,
           brk_fun %in% c("brk_default_hi", "brk_default_lo") &
           extend == FALSE
         ))
-  should_either(names(test_df$x) == "complex")
 
+  # brk_default2 has breaks 1,2,2,3
+  # with lbl_endpoint, this may create duplicate left endpoints
+  # ie the user asked for something we can't do
+  dont_care(with(test_df,
+          names(x) %in%
+            c("ordinary", "inf", "inf_lo", "inf_hi", "NaN", "NAs") &
+          brk_fun == "brk_default2" &
+          lbl_fun == "lbl_endpoint"
+        ))
+  dont_care(with(test_df,
+          brk_fun == "brk_default2" &
+          lbl_fun == "lbl_endpoint" &
+          drop == FALSE
+        ))
+  dont_care(with(test_df,
+          brk_fun == "brk_n" &
+          lbl_fun == "lbl_endpoint"
+        ))
+
+  should_either(names(test_df$x) == "complex")
 
   for (r in seq_len(nrow(test_df))) {
     tdata <- test_df[r, ]
