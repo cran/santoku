@@ -30,20 +30,22 @@ NULL
 #'
 #' @details
 #'
-#' `x` may be numeric, or a [Date or Date-Time][DateTimeClasses].
+#' `x` may be a numeric vector, or more generally, any vector which can be
+#' compared with `<` and `==` (see [Ops][groupGeneric]). In particular [Date]
+#' and [date-time][DateTimeClasses] objects are supported. Character vectors
+#' are supported with a warning.
 #'
 #' ## Breaks
 #'
-#' `breaks` may be a numeric vector or a function.
+#' `breaks` may be a vector or a function.
 #'
 #' If it is a vector, `breaks` gives the break endpoints. Repeated values create
 #' singleton intervals. For example `breaks = c(1, 3, 3, 5)` creates 3
 #' intervals: \code{[1, 3)}, \code{{3}} and \code{(3, 5]}.
 #'
-#' If `breaks` is a function it is called with the `x`, `extend`, `left` and
+#' If `breaks` is a function, it is called with the `x`, `extend`, `left` and
 #' `close_end` arguments, and should return an object of class `breaks`.
-#' Use `brk_*` functions in this context, to create a variety of data-dependent
-#' breaks.
+#' Use `brk_*` functions to create a variety of data-dependent breaks.
 #'
 #' ## Options for breaks
 #'
@@ -51,10 +53,10 @@ NULL
 #' closed intervals are created.
 #'
 #' If `close_end` is `TRUE` the end break will be closed at both ends, ensuring
-#' that all values `y` with `min(x) <= y <= max(x)` are included in the default
-#' intervals.
+#' that all values `x` with `min(breaks) <= x <= max(breaks)` are included in
+#' the default intervals.
 #'
-#' Overall:
+#' Using [mathematical set notation][lbl_intervals()]:
 #'
 #' * If `left` is `TRUE` and `close_end` is `TRUE`, breaks will look like
 #'   \code{[x1, x2), [x2, x3) ... [x_n-1, x_n]}.
@@ -276,8 +278,10 @@ chop_deciles <- function(x, ...) {
 #' @examples
 #' chop_equally(1:10, 5)
 #'
-chop_equally <- function (x, groups, ..., left = is.numeric(x), close_end = TRUE) {
-  chop(x, brk_equally(groups), ..., left = left, close_end = close_end)
+chop_equally <- function (x, groups, ..., labels = lbl_intervals(raw = TRUE),
+                            left = is.numeric(x), close_end = TRUE) {
+  chop(x, brk_equally(groups), ..., labels = labels, left = left,
+         close_end = close_end)
 }
 
 
@@ -309,6 +313,38 @@ chop_equally <- function (x, groups, ..., left = is.numeric(x), close_end = TRUE
 #' @importFrom lifecycle deprecated
 chop_mean_sd <- function (x, sds = 1:3,  ..., sd = deprecated()) {
   chop(x, brk_mean_sd(sds = sds, sd = sd), ...)
+}
+
+
+
+#' Chop using pretty breakpoints
+#'
+#' `chop_pretty()` uses [base::pretty()] to calculate breakpoints
+#' which are 1, 2 or 5 times a power of 10. These look nice in graphs.
+#'
+#' [base::pretty()] tries to return `n+1` breakpoints, i.e. `n` intervals, but
+#' note that this is not guaranteed. There are methods for Date and POSIXct
+#' objects.
+#'
+#' For fine-grained control over [base::pretty()] parameters, use
+#' `chop(x, brk_pretty(...))`.
+#'
+#' @inheritParams chop
+#' @inherit chop-doc params return
+#' @param n Positive integer passed to [base::pretty()]. How many intervals to chop into?
+#' @param ... Passed to [chop()] by `chop_pretty()` and `tab_pretty()`; passed
+#'   to [base::pretty()] by `brk_pretty()`.
+#'
+#' @export
+#' @order 1
+#'
+#' @examples
+#' chop_pretty(1:10)
+#'
+#' chop(1:10, brk_pretty(n = 5, high.u.bias = 0))
+#'
+chop_pretty <- function (x, n = 5, ...) {
+  chop(x, brk_pretty(n = n), ...)
 }
 
 
@@ -367,6 +403,30 @@ chop_evenly <- function (x, intervals, ..., close_end = TRUE) {
   chop(x, brk_evenly(intervals), ..., close_end = close_end)
 }
 
+
+#' Chop into proportions of the range of x
+#'
+#' `chop_proportions()` chops `x` into `proportions` of its range, excluding
+#' infinite values.
+#'
+#' By default, labels show the raw numeric endpoints. To label intervals by
+#' the proportions, use `labels = lbl_intervals(raw = FALSE)`.
+#'
+#' @param proportions Numeric vector between 0 and 1: proportions of x's range
+#' @inheritParams chop
+#' @inherit chop-doc params return
+#'
+#' @family chopping functions
+#'
+#' @export
+#' @order 1
+#' @examples
+#' chop_proportions(0:10, c(0.2, 0.8))
+#'
+chop_proportions <- function (x, proportions, ...,
+                                labels = lbl_intervals(raw = TRUE)) {
+  chop(x, brk_proportions(proportions), labels = labels, ...)
+}
 
 #' Chop into fixed-sized groups
 #'

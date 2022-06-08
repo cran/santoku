@@ -66,19 +66,21 @@ intervals containing the value of \code{x}.
 \code{tab()} calls \code{chop()} and returns a contingency \code{\link[=table]{table()}} from the result.
 }
 \details{
-\code{x} may be numeric, or a \link[=DateTimeClasses]{Date or Date-Time}.
+\code{x} may be a numeric vector, or more generally, any vector which can be
+compared with \code{<} and \code{==} (see \link[=groupGeneric]{Ops}). In particular \link{Date}
+and \link[=DateTimeClasses]{date-time} objects are supported. Character vectors
+are supported with a warning.
 \subsection{Breaks}{
 
-\code{breaks} may be a numeric vector or a function.
+\code{breaks} may be a vector or a function.
 
 If it is a vector, \code{breaks} gives the break endpoints. Repeated values create
 singleton intervals. For example \code{breaks = c(1, 3, 3, 5)} creates 3
 intervals: \code{[1, 3)}, \code{{3}} and \code{(3, 5]}.
 
-If \code{breaks} is a function it is called with the \code{x}, \code{extend}, \code{left} and
+If \code{breaks} is a function, it is called with the \code{x}, \code{extend}, \code{left} and
 \code{close_end} arguments, and should return an object of class \code{breaks}.
-Use \verb{brk_*} functions in this context, to create a variety of data-dependent
-breaks.
+Use \verb{brk_*} functions to create a variety of data-dependent breaks.
 }
 
 \subsection{Options for breaks}{
@@ -87,10 +89,10 @@ By default, left-closed intervals are created. If \code{left} is \code{FALSE}, r
 closed intervals are created.
 
 If \code{close_end} is \code{TRUE} the end break will be closed at both ends, ensuring
-that all values \code{y} with \verb{min(x) <= y <= max(x)} are included in the default
-intervals.
+that all values \code{x} with \verb{min(breaks) <= x <= max(breaks)} are included in
+the default intervals.
 
-Overall:
+Using \link[=lbl_intervals]{mathematical set notation}:
 \itemize{
 \item If \code{left} is \code{TRUE} and \code{close_end} is \code{TRUE}, breaks will look like
 \code{[x1, x2), [x2, x3) ... [x_n-1, x_n]}.
@@ -181,6 +183,7 @@ Other chopping functions:
 \code{\link{chop_evenly}()},
 \code{\link{chop_mean_sd}()},
 \code{\link{chop_n}()},
+\code{\link{chop_proportions}()},
 \code{\link{chop_quantiles}()},
 \code{\link{chop_width}()},
 \code{\link{fillet}()}

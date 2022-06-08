@@ -50,6 +50,10 @@ chopped <- chop_mean_sd(x)
 data.frame(x, chopped)
 
 ## -----------------------------------------------------------------------------
+chopped <- chop_pretty(x)
+data.frame(x, chopped)
+
+## -----------------------------------------------------------------------------
 tab_n(x, 4)
 tab_width(x, 2)
 tab_evenly(x, 5)
@@ -66,20 +70,25 @@ chopped <- chop(x, c(2, 5, 8), labels = c("Lowest", "Low", "Higher", "Highest"))
 data.frame(x, chopped)
 
 ## -----------------------------------------------------------------------------
-chopped <- chop(x, c(2, 5, 8), lbl_dash())
+chopped <- chop(x, c(2, 5, 8), labels = lbl_dash())
 data.frame(x, chopped)
 
 ## -----------------------------------------------------------------------------
-chopped <- chop(x, c(2, 5, 8), lbl_dash(first = "< 2", last = "8+"))
+chopped  <- chop(1:10, c(2, 5, 8), labels = lbl_discrete())
+chopped2 <- chop(1:10, c(2, 5, 8), labels = lbl_dash())
+data.frame(x = 1:10, lbl_discrete = chopped, lbl_dash = chopped2)
+
+## -----------------------------------------------------------------------------
+chopped <- chop(x, c(2, 5, 8), labels = lbl_dash(first = "< 2", last = "8+"))
 data.frame(x, chopped)
 
 ## -----------------------------------------------------------------------------
-chopped <- chop(x, c(2, 5, 8), lbl_seq())
+chopped <- chop(x, c(2, 5, 8), labels = lbl_seq())
 data.frame(x, chopped)
 
 ## -----------------------------------------------------------------------------
-chop(x, c(2, 5, 8), lbl_seq("(1)"))
-chop(x, c(2, 5, 8), lbl_seq("i."))
+chop(x, c(2, 5, 8), labels = lbl_seq("(1)"))
+chop(x, c(2, 5, 8), labels = lbl_seq("i."))
 
 ## -----------------------------------------------------------------------------
 chopped <- chop(x, c(3, 5, 7), extend = FALSE)

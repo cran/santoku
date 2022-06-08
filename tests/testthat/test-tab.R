@@ -37,11 +37,27 @@ test_that("tab_evenly", {
 })
 
 
+test_that("tab_proportions", {
+  expect_identical(
+    tab_proportions(0:10, c(0.2, 0.8)),
+    table(rep(c("[0, 2)", "[2, 8)", "[8, 10]"), c(2, 6, 3)), dnn = NULL)
+  )
+})
+
+
 test_that("tab_mean_sd", {
   expect_silent(
-          tb <- tab_mean_sd(rnorm(100), sds = 1:3, extend = TRUE, drop = FALSE)
-        )
+    tb <- tab_mean_sd(rnorm(100), sds = 1:3, extend = TRUE, drop = FALSE)
+  )
   expect_equivalent(length(tb), 8)
+})
+
+
+test_that("tab_pretty", {
+  expect_silent(
+    tb <- tab_pretty(1:9)
+  )
+  expect_equivalent(length(tb), 5)
 })
 
 
@@ -66,7 +82,7 @@ test_that("tab_deciles", {
 test_that("tab_equally", {
   expect_identical(
     tab_equally(1:4, 4),
-    table(x = c("[0%, 25%)", "[25%, 50%)", "[50%, 75%)", "[75%, 100%]"),
+    table(x = c("[1, 1.75)", "[1.75, 2.5)", "[2.5, 3.25)", "[3.25, 4]"),
           dnn = NULL)
   )
 })

@@ -1,4 +1,24 @@
 
+#' Return formatted strings for endpoints
+#'
+#' Methods will pick up a `scaled_endpoints`
+#' attribute if one exists. This provides the numbers
+#' for when `raw = FALSE`.
+#'
+#' Different breaks subclasses may have different default formats.
+#'
+#' A `.numeric` method exists so that formatted labels can be created
+#' from e.g. midpoints or other things that aren't breaks
+#' themselves.
+#'
+#' @param breaks Either a breaks object, or a numeric vector
+#' @param raw Report raw numbers instead of e.g. quantiles?
+#' @param fmt Format string or function
+#' @param ...
+#'
+#' @return A character vector of break endpoints.
+#' @noRd
+#'
 endpoint_labels <- function (breaks, raw, fmt = NULL, ...) {
   UseMethod("endpoint_labels")
 }
@@ -106,6 +126,14 @@ endpoint_labels.sdBreaks <- function (breaks, raw, fmt = NULL) {
 }
 
 
+#' Return numeric (or whatever) endpoints of breaks, possibly scaled
+#'
+#' @param breaks Breaks or numeric object
+#' @param raw Logical. If `FALSE`, return endpoints scaled as e.g. sds or
+#'   quantiles
+#'
+#' @return Numbers, dates, etc. with no `breaks` class.
+#' @noRd
 scaled_endpoints <- function (breaks, raw) {
   UseMethod("scaled_endpoints")
 }
@@ -122,7 +150,7 @@ scaled_endpoints.breaks <- function (breaks, raw) {
 
 
 #' @export
-scaled_endpoints.numeric <- function (breaks, raw) {
+scaled_endpoints.default <- function (breaks, raw) {
   if (raw) {
     breaks
   } else {

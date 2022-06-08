@@ -125,6 +125,15 @@ test_that("chop_evenly", {
 })
 
 
+test_that("chop_proportions", {
+  x <- 0:10
+  expect_equivalent(
+    chop_proportions(x, c(0.2, 0.8), labels = lbl_seq("1")),
+    factor(rep(1:3, c(2, 6, 3)))
+  )
+})
+
+
 test_that("chop_quantiles", {
   x <- 1:6
   expect_equivalent(
@@ -168,6 +177,13 @@ test_that("chop_mean_sd", {
   expect_silent(chop_mean_sd(x, sds = c(1, 1.96)))
   lifecycle::expect_deprecated(res3 <- chop_mean_sd(x, sd = 2))
   expect_equivalent(res2, res3)
+})
+
+
+test_that("chop_pretty", {
+  expect_silent(res <- chop_pretty(1:10))
+  expect_silent(res <- chop_pretty(1:10, 3))
+  expect_silent(res <- chop_pretty(1:10, 3))
 })
 
 

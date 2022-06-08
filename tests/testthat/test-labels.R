@@ -129,6 +129,72 @@ test_that("lbl_glue arguments", {
 })
 
 
+
+test_that("lbl_endpoints", {
+  lbrk <- brk_res(brk_default(c(1, 3, 5)), extend = FALSE)
+  expect_equivalent(
+    lbl_endpoints()(lbrk),
+    c("1", "3")
+  )
+  expect_equivalent(
+    lbl_endpoints(left = FALSE)(lbrk),
+    c("3", "5")
+  )
+
+  dates <- as.Date("2000-01-01") + c(3, 5)
+  dbrk <- brk_res(brk_default(dates),
+                  x = as.Date("2000-01-01") + 1:10)
+  expect_equivalent(
+    lbl_endpoints()(dbrk),
+    as.character(dates[1])
+  )
+})
+
+
+test_that("lbl_endpoints arguments", {
+  lbrk <- brk_res(brk_default(c(1, 3, 5)), extend = FALSE)
+  expect_equivalent(
+    lbl_endpoints(fmt = "%.2f")(lbrk),
+    c("1.00", "3.00")
+  )
+  expect_equivalent(
+    lbl_endpoints(fmt = percent)(lbrk),
+    c("100%", "300%")
+  )
+
+  lifecycle::expect_deprecated(lbl_endpoint()(lbrk))
+})
+
+
+test_that("lbl_midpoints", {
+  lbrk <- brk_res(brk_manual(1:3, rep(TRUE, 3)))
+  expect_equivalent(lbl_midpoints()(lbrk), c("1.5", "2.5"))
+
+
+  dates <- as.Date("2000-01-01") + c(3, 5)
+  dbrk <- brk_res(brk_default(dates),
+                  x = as.Date("2000-01-01") + 1:10)
+  expect_equivalent(
+    lbl_endpoints()(dbrk),
+    c("2000-01-04")
+  )
+})
+
+
+test_that("lbl_midpoints arguments", {
+  lbrk <- brk_res(brk_manual(1:3, rep(TRUE, 3)))
+  expect_equivalent(lbl_midpoints(first = "{r}")(lbrk), c("2", "2.5"))
+  expect_equivalent(lbl_midpoints(last = "{l}")(lbrk), c("1.5", "2"))
+
+  sbrk <- brk_res(brk_manual(c(1, 2, 2, 3), c(TRUE, TRUE, FALSE, TRUE)))
+  expect_equivalent(lbl_midpoints(single = "[{l}]")(sbrk), c("1.5", "[2]", "2.5"))
+
+  qbrk <- brk_res(brk_quantiles(c(0, 0.5, 1)), x = 0:10)
+  expect_equivalent(lbl_midpoints(fmt = percent)(qbrk), c("25%", "75%"))
+  expect_equivalent(lbl_midpoints(raw = TRUE)(qbrk), c("2.5", "7.5"))
+})
+
+
 test_that("lbl_intervals", {
   lbrk <- brk_res(brk_manual(1:3, rep(TRUE, 3)))
   rbrk <- brk_res(brk_manual(1:3, rep(FALSE, 3)))
@@ -243,36 +309,16 @@ test_that("lbl_discrete arguments", {
     c("1-2", ">= 3")
   )
 
+  sbrk <- brk_res(brk_default(c(1, 3, 3, 6)))
+  expect_equivalent(
+    lbl_discrete("-", single = "[{l}]")(sbrk),
+    c("1-2", "[3]", "4-5")
+  )
+
   brk1000 <- brk_res(brk_default(c(1, 3, 5) * 1000))
   expect_equivalent(
     lbl_discrete("-", unit = 1000)(brk1000),
     c("1000-2000", "3000-4000")
-  )
-})
-
-
-test_that("lbl_endpoint", {
-  lbrk <- brk_res(brk_default(c(1, 3, 5)), extend = FALSE)
-  expect_equivalent(
-    lbl_endpoint()(lbrk),
-    c("1", "3")
-  )
-  expect_equivalent(
-    lbl_endpoint(left = FALSE)(lbrk),
-    c("3", "5")
-  )
-})
-
-
-test_that("lbl_endpoint arguments", {
-  lbrk <- brk_res(brk_default(c(1, 3, 5)), extend = FALSE)
-  expect_equivalent(
-    lbl_endpoint(fmt = "%.2f")(lbrk),
-    c("1.00", "3.00")
-  )
-  expect_equivalent(
-    lbl_endpoint(fmt = percent)(lbrk),
-    c("100%", "300%")
   )
 })
 
@@ -292,11 +338,11 @@ test_that("bug: breaks labels don't produce duplicates", {
 })
 
 
-test_that("bug: lbl_endpoint() works with no format and non-standard breaks", {
+test_that("bug: lbl_endpoints() works with no format and non-standard breaks", {
   expect_error(
-    chop_quantiles(0:10, 0.5, labels = lbl_endpoint())
+    chop_quantiles(0:10, 0.5, labels = lbl_endpoints())
     , NA)
   expect_error(
-    chop_mean_sd(0:10, labels = lbl_endpoint())
+    chop_mean_sd(0:10, labels = lbl_endpoints())
     , NA)
 })

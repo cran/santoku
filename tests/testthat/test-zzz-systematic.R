@@ -19,10 +19,12 @@ test_that("systematic tests", {
   )
   brk_funs <- list(
     brk_evenly      = brk_evenly(2),
+    brk_proportions = brk_proportions(c(0.25, 0.6)),
     brk_manual      = brk_manual(1:3, rep(TRUE, 3)),
     brk_manual2     = brk_manual(1:3, c(FALSE, TRUE, FALSE)),
     brk_mean_sd     = brk_mean_sd(),
     brk_mean_sd2    = brk_mean_sd(c(1, 1.96)),
+    brk_pretty      = brk_pretty(),
     brk_n           = brk_n(5),
     brk_quantiles   = brk_quantiles(1:3/4),
     brk_default     = brk_default(1:3),
@@ -45,7 +47,8 @@ test_that("systematic tests", {
     lbl_seq2          = lbl_seq("(i)"),
     lbl_manual        = lbl_manual(letters[1:2]),
     lbl_manual2       = lbl_manual(letters[1:2], "%s)"),
-    lbl_endpoint      = lbl_endpoint()
+    lbl_endpoints     = lbl_endpoints(),
+    lbl_midpoints     = lbl_midpoints()
   )
 
   test_df <- expand.grid(
@@ -73,10 +76,12 @@ test_that("systematic tests", {
 
   POSIXct_breaks <- c("brk_def_POSIXct", "brk_w_difft_sec")
   Date_breaks <- c("brk_def_Date", "brk_w_difft_day")
-  skip_test(names(x) == "Date" & ! brk_fun %in% Date_breaks)
-  skip_test(names(x) != "Date" & brk_fun %in% Date_breaks)
-  skip_test(names(x) == "POSIXct" & ! brk_fun %in% POSIXct_breaks)
-  skip_test(names(x) != "POSIXct" & brk_fun %in% POSIXct_breaks)
+  skip_test(names(x) %in% c("Date", "POSIXct")  &
+              ! brk_fun %in% c(Date_breaks, POSIXct_breaks))
+  skip_test(! names(x) %in% c("Date", "POSIXct") &
+              brk_fun %in% c(Date_breaks, POSIXct_breaks))
+  # don't try to break dates by 1 second width (very slow!)
+  skip_test(names(x) != "POSIXct" & brk_fun == "brk_w_difft_sec")
 
   test_df$expect <- "succeed"
   # some things should fail
@@ -108,22 +113,29 @@ test_that("systematic tests", {
         ))
 
   # brk_default2 has breaks 1,2,2,3
-  # with lbl_endpoint, this may create duplicate left endpoints
+  # with lbl_endpoints, this may create duplicate left endpoints
   # ie the user asked for something we can't do
   dont_care(with(test_df,
           names(x) %in%
             c("ordinary", "inf", "inf_lo", "inf_hi", "NaN", "NAs") &
           brk_fun == "brk_default2" &
-          lbl_fun == "lbl_endpoint"
+          lbl_fun == "lbl_endpoints"
         ))
   dont_care(with(test_df,
           brk_fun == "brk_default2" &
-          lbl_fun == "lbl_endpoint" &
+          lbl_fun == "lbl_endpoints" &
           drop == FALSE
         ))
   dont_care(with(test_df,
           brk_fun == "brk_n" &
-          lbl_fun == "lbl_endpoint"
+          lbl_fun == "lbl_endpoints"
+        ))
+
+  # lbl_midpoints struggles with Inf for obvious reasons
+  dont_care(with(test_df,
+          names(x) %in% c("inf", "inf_lo", "inf_hi") &
+          brk_fun == "brk_n" &
+          lbl_fun == "lbl_midpoints"
         ))
 
   should_either(names(test_df$x) == "complex")

@@ -52,13 +52,18 @@ tab_width <- function (x, width, start, ..., left = sign(width) > 0) {
 #' @export
 #' @order 3
 tab_evenly <- function (x, intervals, ..., close_end = TRUE) {
-    default_table(
-      chop_evenly(
-      x         = x,
-      intervals = intervals,
-      ...,
-      close_end = close_end
-    )
+  default_table(
+    chop_evenly(x = x, intervals = intervals, ..., close_end = close_end)
+  )
+}
+
+
+#' @rdname chop_proportions
+#' @export
+#' @order 3
+tab_proportions <- function (x, proportions, ...) {
+  default_table(
+    chop_proportions(x = x, proportions = proportions, ...)
   )
 }
 
@@ -85,6 +90,17 @@ tab_n <- function (x, n, ..., close_end = TRUE) {
 #'
 tab_mean_sd <- function (x, sds = 1:3, ...) {
   default_table(chop_mean_sd(x = x, sds = sds, ...))
+}
+
+
+#' @rdname chop_pretty
+#' @export
+#' @order 3
+#' @examples
+#' tab_pretty(1:10)
+#'
+tab_pretty <- function (x, n = 5, ...) {
+  default_table(chop_pretty(x = x, n = n, ...))
 }
 
 

@@ -1,3 +1,28 @@
+# santoku 0.8.0
+
+## Breaking changes
+
+* `lbl_endpoint()` has been renamed to `lbl_endpoints()`. The old version will
+  trigger a deprecation warning. `lbl_endpoints()` gains `first`, `last` and
+  `single` arguments like other labelling functions.
+  
+## Other changes
+
+* New `chop_pretty()`, `brk_pretty()` and `tab_pretty()` functions use 
+  `base::pretty()` to calculate attractive breakpoints. Thanks @davidhodge931.
+* New `chop_proportions()`, `brk_proportions()` and `tab_proportions()`
+  functions chop `x` into proportions of its range.
+* `chop_equally()` now uses `lbl_intervals(raw = TRUE)` by default, bringing it
+  into line with `chop_evenly()`, `chop_width()` and `chop_n()`.
+* New `lbl_midpoints()` function labels breaks by their midpoints.
+* `lbl_discrete()` gains a `single` argument.
+* You can now chop `ts`, `xts::xts` and `zoo::zoo` objects.
+* `chop()` is more forgiving when mixing different types, e.g.:
+  - `Date` objects with `POSIXct` breaks, and vice versa
+  - `bit64::integer64` and `double`s
+* Bugfix: `lbl_discrete()` sometimes had ugly label formatting. 
+
+
 # santoku 0.7.0
 
 ## Breaking changes

@@ -101,6 +101,43 @@ lbl_dash <- function (symbol = em_dash(), fmt = NULL, single = "{l}", first = NU
 }
 
 
+#' Label chopped intervals by their midpoints
+#'
+#' This uses the midpoint of each interval for
+#' its label.
+#'
+#' @inherit label-doc
+#' @inherit first-last-doc
+#'
+#' @family labelling functions
+#'
+#' @export
+#'
+#' @examples
+#' chop(1:10, c(2, 5, 8), lbl_midpoints())
+lbl_midpoints <- function (fmt = NULL, single = NULL, first = NULL, last = NULL,
+                          raw = FALSE) {
+  function (breaks) {
+    assert_that(is.breaks(breaks))
+
+    break_nums <- scaled_endpoints(breaks, raw = raw)
+    l_nums <- break_nums[-length(break_nums)]
+    r_nums <- break_nums[-1]
+    # doing this, rather than (l_nums + r_nums)/2, works for e.g. Date objects:
+    midpoints <- l_nums + (r_nums - l_nums)/2
+
+    # we've applied raw already (anyway, midpoints is just a numeric)
+    midpoints <- endpoint_labels(midpoints, raw = TRUE, fmt = fmt)
+
+    gluer <- lbl_glue(label = "{m}", fmt = fmt, single = single, first = first,
+                        last = last, raw = raw, m = midpoints)
+    labels <- gluer(breaks)
+
+    labels
+  }
+}
+
+
 #' Label chopped intervals using the {glue} package
 #'
 #' Use `"{l}"` and `"{r}"` to show the left and right endpoints of the intervals.
@@ -119,7 +156,6 @@ lbl_dash <- function (symbol = em_dash(), fmt = NULL, single = "{l}", first = NU
 #' * `l_closed` is a logical vector. Elements are `TRUE` when the left
 #'   endpoint is closed.
 #' * `r_closed` is a logical vector, `TRUE` when the right endpoint is closed.
-#'
 #'
 #' Endpoints will be formatted by `fmt` before being passed to `glue()`.
 #'
@@ -172,30 +208,54 @@ lbl_glue <- function (label, fmt = NULL, single = NULL, first = NULL, last = NUL
     l_closed <- left[-len_breaks]
     r_closed <- ! left[-1]
 
+    # check ... for anything not in glue::glue args
+    # effectively, we move any user-supplied arguments into
+    # an environment specifically for glue
+    # this is mostly to make the lbl_midpoints() hack
+    # of passing in `m` work
+    dots <- rlang::enexprs(...)
+    glue_env <- new.env()
+    not_glue_args <- setdiff(names(dots), names(formals(glue::glue)))
+    for (nm in not_glue_args) {
+      assign(deparse(dots[[nm]]),
+               eval(dots[[nm]], parent.frame()),
+               glue_env
+             )
+    }
     labels <- glue::glue(label, l = l, r = r, l_closed = l_closed,
-                         r_closed = r_closed, ...)
+                         r_closed = r_closed, ..., .envir = glue_env)
 
     if (! is.null(single)) {
       # which breaks are singletons?
       singletons <- singletons(breaks)
 
       labels[singletons] <- glue::glue(single,
-                                       l = l[singletons],
-                                       r = r[singletons],
-                                       l_closed = l_closed[singletons],
-                                       r_closed = r_closed[singletons], ...)
+                                         l = l[singletons],
+                                         r = r[singletons],
+                                         l_closed = l_closed[singletons],
+                                         r_closed = r_closed[singletons],
+                                         ...,
+                                         .envir = glue_env
+                                       )
     }
 
     if (! is.null(first)) {
-      labels[1] <- glue::glue(first, l = l[1], r = r[1], l_closed = l_closed[1],
-                              r_closed = r_closed[1], ...)
+      labels[1] <- glue::glue(first, l = l[1], r = r[1],
+                                l_closed = l_closed[1],
+                                r_closed = r_closed[1],
+                                ...,
+                                .envir = glue_env
+                              )
     }
 
     if (! is.null(last)) {
       ll <- len_breaks - 1
       labels[ll] <- glue::glue(last, l = l[ll], r = r[ll],
                                  l_closed = l_closed[ll],
-                                 r_closed = r_closed[ll], ...)
+                                 r_closed = r_closed[ll],
+                                 ...,
+                                 .envir = glue_env
+                               )
     }
 
     return(labels)
@@ -208,28 +268,42 @@ lbl_glue <- function (label, fmt = NULL, single = NULL, first = NULL, last = NUL
 #' This is useful when the left endpoint unambiguously indicates the
 #' interval. In other cases it may give errors due to duplicate labels.
 #'
+#' `lbl_endpoint()` is deprecated. Do not use it.
+#'
 #' @inherit label-doc
+#' @inherit first-last-doc
 #' @param left Flag. Use left endpoint or right endpoint?
+#'
+#' @family labelling functions
 #'
 #' @export
 #'
 #' @examples
-#' chop(1:10, c(2, 5, 8), lbl_endpoint(left = TRUE))
-#' chop(1:10, c(2, 5, 8), lbl_endpoint(left = FALSE))
+#' chop(1:10, c(2, 5, 8), lbl_endpoints(left = TRUE))
+#' chop(1:10, c(2, 5, 8), lbl_endpoints(left = FALSE))
 #' if (requireNamespace("lubridate")) {
 #'   tab_width(
 #'           as.Date("2000-01-01") + 0:365,
 #'          months(1),
-#'          labels = lbl_endpoint(fmt = "%b")
+#'          labels = lbl_endpoints(fmt = "%b")
 #'        )
 #' }
-lbl_endpoint <- function (fmt = NULL, raw = FALSE, left = TRUE) {
-  assert_that(is.null(fmt) || is_format(fmt), is.flag(raw), is.flag(left))
+lbl_endpoints <- function (left = TRUE, fmt = NULL, single = NULL, first = NULL,
+                             last = NULL, raw = FALSE) {
+  assert_that(is.flag(left))
 
-  function (breaks) {
-    elabels <- endpoint_labels(breaks, raw, fmt)
-    if (left) elabels[-length(elabels)] else elabels[-1]
-  }
+  label <- if (left) "{l}" else "{r}"
+  lbl_glue(label, fmt = fmt, single = single, first = first, last = last,
+             raw = raw)
+}
+
+
+#' @rdname lbl_endpoints
+#' @export
+lbl_endpoint <- function (fmt = NULL, raw = FALSE, left = TRUE) {
+  lifecycle::deprecate_soft(when = "0.8.0", what = "lbl_endpoint()",
+                              with = "lbl_endpoints()")
+   lbl_endpoints(fmt = fmt, raw = raw, left = left)
 }
 
 
@@ -269,6 +343,7 @@ lbl_discrete <- function (
                   symbol = em_dash(),
                   unit = 1,
                   fmt = NULL,
+                  single = NULL,
                   first = NULL,
                   last = NULL
                 ) {
@@ -276,6 +351,7 @@ lbl_discrete <- function (
           is.string(symbol),
           is.scalar(unit),
           is.null(fmt) || is_format(fmt),
+          is.string(single) || is.null(single),
           is.string(first) || is.null(first),
           is.string(last) || is.null(last)
         )
@@ -306,21 +382,23 @@ lbl_discrete <- function (
       warning("Intervals smaller than `unit` are labelled as \"--\"")
     }
 
-    if (! is.null(fmt)) {
-      labels_l <- apply_format(fmt, l)
-      labels_r <- apply_format(fmt, r)
-    } else {
-      labels_l <- base::format(l)
-      labels_r <- base::format(r)
-    }
+    labels_l <- endpoint_labels(l, raw = FALSE, fmt = fmt)
+    labels_r <- endpoint_labels(r, raw = FALSE, fmt = fmt)
 
     labels <- paste0(labels_l, symbol, labels_r)
-    labels[singletons] <- l[singletons]
+    labels[singletons] <- labels_l[singletons]
     labels[too_small] <- "--"
 
     l_closed <- left_l
     # r_closed is used for "]" in labels so need to switch it here:
     r_closed <- ! left_r
+
+    if (! is.null(single)) {
+      labels[singletons] <- glue::glue(single, l = labels_l[singletons],
+                                         r = labels_r[singletons],
+                                         l_closed = l_closed[singletons],
+                                         r_closed = r_closed[singletons])
+    }
 
     if (! is.null(first)) {
       labels[1] <- glue::glue(first, l = labels_l[1], r = labels_r[1],

@@ -97,6 +97,29 @@ brk_mean_sd <- function (sds = 1:3, sd = deprecated()) {
   }
 }
 
+
+
+#' @rdname chop_pretty
+#'
+#' @export
+#' @order 2
+brk_pretty <- function (n = 5, ...) {
+  assert_that(is.count(n))
+
+  function (x, extend, left, close_end) {
+    breaks <- base::pretty(x, n = n, ...)
+    if (length(breaks) == 0 || is.null(breaks)) {
+      return(empty_breaks())
+    }
+
+    breaks <- create_lr_breaks(breaks, left, close_end)
+    breaks <- maybe_extend(breaks, x, extend)
+
+    breaks
+  }
+}
+
+
 #' Equal-width intervals for dates or datetimes
 #'
 #' `brk_width()` can be used with time interval classes from base R or the
@@ -250,6 +273,35 @@ brk_evenly <- function(intervals) {
     breaks <- seq(min_x, max_x, length.out = intervals + 1L)
     breaks <- create_lr_breaks(breaks, left, close_end)
     maybe_extend(breaks, x, extend)
+  }
+}
+
+
+#' @rdname chop_proportions
+#' @export
+#' @order 2
+brk_proportions <- function(proportions) {
+  assert_that(is.numeric(proportions), noNA(proportions),
+                all(proportions >= 0), all(proportions <= 1))
+  proportions <- sort(proportions)
+
+  function (x, extend, left, close_end) {
+    min_x <- quiet_min(x[is.finite(x)])
+    max_x <- quiet_max(x[is.finite(x)])
+    range_x <- max_x - min_x
+    if (sign(range_x) <= 0) return(empty_breaks())
+
+    breaks <- min_x + range_x * proportions
+    breaks <- create_lr_breaks(breaks, left, close_end)
+
+    scaled_endpoints <- proportions
+    needs <- needs_extend(breaks, x, extend)
+    if ((needs & LEFT) > 0) scaled_endpoints <- c(0, scaled_endpoints)
+    if ((needs & RIGHT) > 0) scaled_endpoints <- c(scaled_endpoints, 1)
+    breaks <- maybe_extend(breaks, x, extend)
+    attr(breaks, "scaled_endpoints") <- scaled_endpoints
+
+    breaks
   }
 }
 
