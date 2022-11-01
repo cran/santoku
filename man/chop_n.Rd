@@ -10,7 +10,7 @@ chop_n(x, n, ..., close_end = TRUE)
 
 brk_n(n)
 
-tab_n(x, n, ..., close_end = TRUE)
+tab_n(x, n, ...)
 }
 \arguments{
 \item{x}{A vector.}
@@ -30,11 +30,14 @@ close first break at left?)}
 \verb{tab_*} functions return a contingency \code{\link[=table]{table()}}.
 }
 \description{
-\code{chop_n()} creates intervals containing a fixed number of elements. One
-interval may have fewer elements.
+\code{chop_n()} creates intervals containing a fixed number of elements.
 }
 \details{
 Note that \code{chop_n()} sets \code{close_end = TRUE} by default.
+
+If \code{length(x)} is not divided exactly by \code{n}, one interval will have fewer
+than \code{n} elements. This will be the last interval if \code{left} is \code{TRUE}, and
+the first interval otherwise.
 
 Groups may be larger than \code{n}, if there are too many duplicated elements
 in \code{x}. If so, a warning is given.
@@ -56,6 +59,7 @@ tab_n(1:10, 4)
 Other chopping functions: 
 \code{\link{chop_equally}()},
 \code{\link{chop_evenly}()},
+\code{\link{chop_fn}()},
 \code{\link{chop_mean_sd}()},
 \code{\link{chop_proportions}()},
 \code{\link{chop_quantiles}()},

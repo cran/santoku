@@ -4,7 +4,14 @@
 \alias{fillet}
 \title{Chop data precisely (for programmers)}
 \usage{
-fillet(x, breaks, labels = lbl_intervals(), left = TRUE, close_end = FALSE)
+fillet(
+  x,
+  breaks,
+  labels = lbl_intervals(),
+  left = TRUE,
+  close_end = TRUE,
+  raw = NULL
+)
 }
 \arguments{
 \item{x}{A vector.}
@@ -14,19 +21,18 @@ cut-points from \code{x}.}
 
 \item{labels}{A character vector of labels or a function to create labels.}
 
-\item{left}{Logical. Left-closed breaks?}
+\item{left}{Logical. Left-closed or right-closed breaks?}
 
 \item{close_end}{Logical. Close last break at right? (If \code{left} is \code{FALSE},
 close first break at left?)}
+
+\item{raw}{Logical. Use raw values in labels?}
 }
 \value{
 \code{fillet()} returns a \code{\link{factor}} of the same length as \code{x}, representing
 the intervals containing the value of \code{x}.
 }
 \description{
-Chop data precisely (for programmers)
-}
-\details{
 \code{fillet()} calls \code{\link[=chop]{chop()}} with \code{extend = FALSE} and \code{drop = FALSE}. This
 ensures that you get only the \code{breaks} and \code{labels} you ask for. When
 programming, consider using \code{fillet()} instead of \code{chop()}.
@@ -38,6 +44,7 @@ fillet(1:10, c(2, 5, 8))
 Other chopping functions: 
 \code{\link{chop_equally}()},
 \code{\link{chop_evenly}()},
+\code{\link{chop_fn}()},
 \code{\link{chop_mean_sd}()},
 \code{\link{chop_n}()},
 \code{\link{chop_proportions}()},

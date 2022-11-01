@@ -6,20 +6,21 @@
 \alias{tab_proportions}
 \title{Chop into proportions of the range of x}
 \usage{
-chop_proportions(x, proportions, ..., labels = lbl_intervals(raw = TRUE))
+chop_proportions(x, proportions, ..., raw = TRUE)
 
 brk_proportions(proportions)
 
-tab_proportions(x, proportions, ...)
+tab_proportions(x, proportions, ..., raw = TRUE)
 }
 \arguments{
 \item{x}{A vector.}
 
-\item{proportions}{Numeric vector between 0 and 1: proportions of x's range}
+\item{proportions}{Numeric vector between 0 and 1: proportions of x's range.
+If \code{proportions} has names, these will be used for labels.}
 
 \item{...}{Passed to \code{\link[=chop]{chop()}}.}
 
-\item{labels}{A character vector of labels or a function to create labels.}
+\item{raw}{Logical. Use raw values in labels?}
 }
 \value{
 \verb{chop_*} functions return a \code{\link{factor}} of the same length as \code{x}.
@@ -34,16 +35,18 @@ infinite values.
 }
 \details{
 By default, labels show the raw numeric endpoints. To label intervals by
-the proportions, use \code{labels = lbl_intervals(raw = FALSE)}.
+the proportions, use \code{raw = FALSE}.
 }
 \examples{
 chop_proportions(0:10, c(0.2, 0.8))
+chop_proportions(0:10, c(Low = 0, Mid = 0.2, High = 0.8))
 
 }
 \seealso{
 Other chopping functions: 
 \code{\link{chop_equally}()},
 \code{\link{chop_evenly}()},
+\code{\link{chop_fn}()},
 \code{\link{chop_mean_sd}()},
 \code{\link{chop_n}()},
 \code{\link{chop_quantiles}()},

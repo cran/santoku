@@ -1,3 +1,73 @@
+# santoku 0.9.0
+
+## Breaking changes
+
+There are important changes to `close_end`.
+
+* `close_end` is now `TRUE` by default in `chop()` and `fillet()`. 
+  In previous versions:
+
+  ```r
+  chop(1:2, 1:2)
+  ## [1] [1, 2) {2}   
+  ## Levels: [1, 2) {2}  
+  ```
+  
+  Whereas now:
+  
+  ```r
+  chop(1:2, 1:2)
+  ## [1] [1, 2] [1, 2]
+  ## Levels: [1, 2]
+  ```
+  
+  
+* `close_end` is now always applied after `extend`. For example, in previous
+  versions:
+  
+  ```r
+  chop(1:4, 2:3, close_end = TRUE)
+  ## [1] [1, 2) [2, 3] [2, 3] (3, 4]
+  ## Levels: [1, 2) [2, 3] (3, 4]
+  ```
+  
+  Whereas now:
+  
+  ```r
+  chop(1:4, 2:3, close_end = TRUE)
+  ## [1] [1, 2) [2, 3) [3, 4] [3, 4]
+  ## Levels: [1, 2) [2, 3) [3, 4]
+  ```
+
+We changed this behaviour to be more in line with user expectations. 
+
+* If `breaks` has names, they will be used as labels:
+  
+  ```r
+  chop(1:5, c(Low = 1, Mid = 2, High = 4))
+  ## [1] Low  Mid  Mid  High High
+  ## Levels: Low Mid High  
+  ```
+  Names can also be used for labels in `probs` in `chop_quantiles()` and
+  `proportions` in `chop_proportions()`.
+
+* There is a new `raw` parameter to `chop()`. This replaces the parameter
+  `raw` in `lbl_*` functions, which is now soft-deprecated.
+  
+* `lbl_manual()` is deprecated. Just use a vector argument to `labels` instead.
+
+* A `labels` argument to `chop_quantiles()` now needs to be explicitly named.
+
+I expect these to be the last important breaking changes before we release 
+version 1.0 and mark the package as "stable". If they cause problems for you,
+please file an issue.
+
+
+## Other changes
+* New `chop_fn()`, `brk_fn()` and `tab_fn()` chop using an arbitrary function.
+* Added section on non-standard objects to vignette.
+
+
 # santoku 0.8.0
 
 ## Breaking changes

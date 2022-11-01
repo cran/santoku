@@ -6,8 +6,11 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
+options(digits = 4)
+
 ## -----------------------------------------------------------------------------
 library(santoku)
+
 x <- runif(10, 0, 10)
 (chopped <- chop(x, breaks = 0:10))
 data.frame(x, chopped)
@@ -46,6 +49,10 @@ chopped <- chop_quantiles(x, c(0.25, 0.5, 0.75))
 data.frame(x, chopped)
 
 ## -----------------------------------------------------------------------------
+chopped <- chop_proportions(x, c(0.25, 0.5, 0.75))
+data.frame(x, chopped)
+
+## -----------------------------------------------------------------------------
 chopped <- chop_mean_sd(x)
 data.frame(x, chopped)
 
@@ -60,10 +67,8 @@ tab_evenly(x, 5)
 tab_mean_sd(x)
 
 ## -----------------------------------------------------------------------------
-library(lubridate)
-y2k <- as.Date("2000-01-01") + 0:365
-months <- chop_width(y2k, months(1))
-table(months)
+chopped <- chop(x, c(Lowest = 1, Low = 2, Higher = 5, Highest = 8))
+data.frame(x, chopped)
 
 ## -----------------------------------------------------------------------------
 chopped <- chop(x, c(2, 5, 8), labels = c("Lowest", "Low", "Higher", "Highest"))
@@ -106,7 +111,54 @@ data.frame(
 data.frame(
   y = y,
   rightmost_open = chop(y, 1:5),
-  rightmost_closed   = chop(y, 1:5, close_end = TRUE)
+  rightmost_closed   = chop(y, 1:5, close_end = FALSE)
 )
 
+
+## -----------------------------------------------------------------------------
+y2k <- as.Date("2000-01-01") + 0:10 * 7
+data.frame(
+  y2k = y2k,
+  chopped = chop(y2k, as.Date(c("2000-02-01", "2000-03-01")))
+)
+
+## -----------------------------------------------------------------------------
+# hours of the 2020 Crew Dragon flight:
+crew_dragon <- seq(as.POSIXct("2020-05-30 18:00", tz = "GMT"), 
+                     length.out = 24, by = "hours")
+liftoff <- as.POSIXct("2020-05-30 15:22", tz = "America/New_York")
+dock    <- as.POSIXct("2020-05-31 10:16", tz = "America/New_York")
+
+data.frame(
+  crew_dragon = crew_dragon,
+  chopped = chop(crew_dragon, c(liftoff, dock), 
+                   labels = c("pre-flight", "flight", "docked"))
+)
+
+
+## -----------------------------------------------------------------------------
+library(lubridate)
+data.frame(
+  y2k = y2k,
+  chopped = chop_width(y2k, months(1))
+)
+
+## -----------------------------------------------------------------------------
+data.frame(
+  y2k = y2k,
+  chopped = chop_width(y2k, months(1), labels = lbl_discrete(fmt = "%e %b"))
+)
+
+## -----------------------------------------------------------------------------
+library(units)
+
+x <- set_units(1:10 * 10, cm)
+br <- set_units(1:3, ft)
+data.frame(
+  x = x,
+  chopped = chop(x, br)
+)
+
+## -----------------------------------------------------------------------------
+chop(letters[1:10], c("d", "f"))
 

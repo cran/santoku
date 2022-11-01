@@ -8,28 +8,28 @@
 \alias{tab_deciles}
 \title{Chop by quantiles}
 \usage{
-chop_quantiles(x, probs, ..., left = is.numeric(x), close_end = TRUE)
+chop_quantiles(x, probs, ..., left = is.numeric(x), raw = FALSE)
 
 chop_deciles(x, ...)
 
 brk_quantiles(probs, ...)
 
-tab_quantiles(x, probs, ..., left = is.numeric(x), close_end = TRUE)
+tab_quantiles(x, probs, ..., left = is.numeric(x), raw = FALSE)
 
 tab_deciles(x, ...)
 }
 \arguments{
 \item{x}{A vector.}
 
-\item{probs}{A vector of probabilities for the quantiles.}
+\item{probs}{A vector of probabilities for the quantiles. If \code{probs} has
+names, these will be used for labels.}
 
 \item{...}{Passed to \code{\link[=chop]{chop()}}, or for \code{brk_quantiles()} to
 \code{\link[stats:quantile]{stats::quantile()}}.}
 
-\item{left}{Logical. Left-closed breaks?}
+\item{left}{Logical. Left-closed or right-closed breaks?}
 
-\item{close_end}{Logical. Close last break at right? (If \code{left} is \code{FALSE},
-close first break at left?)}
+\item{raw}{Logical. Use raw values in labels?}
 }
 \value{
 \verb{chop_*} functions return a \code{\link{factor}} of the same length as \code{x}.
@@ -43,10 +43,6 @@ close first break at left?)}
 \code{chop_deciles()} is a convenience shortcut and chops into deciles.
 }
 \details{
-Note that these functions set \code{close_end = TRUE} by default.
-This helps ensure that e.g. \verb{chop_quantiles(x, c(0, 1/3, 2/3, 1)}
-will split the data into three equal-sized groups.
-
 For non-numeric \code{x}, \code{left} is set to \code{FALSE} by default. This works better
 for calculating "type 1" quantiles, since they round down. See
 \code{\link[stats:quantile]{stats::quantile()}}.
@@ -54,21 +50,24 @@ for calculating "type 1" quantiles, since they round down. See
 \examples{
 chop_quantiles(1:10, 1:3/4)
 
+chop_quantiles(1:10, c(Q1 = 0, Q2 = 0.25, Q3 = 0.5, Q4 = 0.75))
+
 chop(1:10, brk_quantiles(1:3/4))
 
 chop_deciles(1:10)
 
 # to label by the quantiles themselves:
-chop_quantiles(1:10, 1:3/4, lbl_intervals(raw = TRUE))
+chop_quantiles(1:10, 1:3/4, raw = TRUE)
 
 set.seed(42)
-tab_quantiles(rnorm(100), probs = 1:3/4, label = lbl_intervals(raw = TRUE))
+tab_quantiles(rnorm(100), probs = 1:3/4, raw = TRUE)
 
 }
 \seealso{
 Other chopping functions: 
 \code{\link{chop_equally}()},
 \code{\link{chop_evenly}()},
+\code{\link{chop_fn}()},
 \code{\link{chop_mean_sd}()},
 \code{\link{chop_n}()},
 \code{\link{chop_proportions}()},

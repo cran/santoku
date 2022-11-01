@@ -22,10 +22,13 @@ NULL
 #' @param breaks A numeric vector of cut-points or a function to create
 #'   cut-points from `x`.
 #' @param labels A character vector of labels or a function to create labels.
-#' @param extend Logical. Extend breaks to `+/-Inf`?
-#' @param left Logical. Left-closed breaks?
+#' @param extend Logical. If `TRUE`, always extend breaks to `+/-Inf`. If `NULL`,
+#'   extend breaks to `min(x)` and/or `max(x)` only if necessary. If `NULL`, never
+#'   extend.
+#' @param left Logical. Left-closed or right-closed breaks?
 #' @param close_end Logical. Close last break at right? (If `left` is `FALSE`,
 #'   close first break at left?)
+#' @param raw Logical. Use raw values in labels?
 #' @param drop Logical. Drop unused levels from the result?
 #'
 #' @details
@@ -47,25 +50,30 @@ NULL
 #' `close_end` arguments, and should return an object of class `breaks`.
 #' Use `brk_*` functions to create a variety of data-dependent breaks.
 #'
+#' Names of `breaks` may be used for labels. See "Labels" below.
+#'
 #' ## Options for breaks
 #'
-#' By default, left-closed intervals are created. If `left` is `FALSE`, right-
-#' closed intervals are created.
+#' By default, left-closed intervals are created. If `left` is `FALSE`,
+#' right-closed intervals are created.
 #'
-#' If `close_end` is `TRUE` the end break will be closed at both ends, ensuring
-#' that all values `x` with `min(breaks) <= x <= max(breaks)` are included in
-#' the default intervals.
+#' If `close_end` is `TRUE` the final break (or first break if `left` is `FALSE`)
+#' will be closed at both ends. This guarantees that all values `x` with
+#' `min(breaks) <= x <= max(breaks)` are included in the intervals.
+#'
+#' Before version 0.9.0, `close_end` was `FALSE` by default, and also behaved
+#' differently with respect to extended breaks: see "Extending intervals" below.
 #'
 #' Using [mathematical set notation][lbl_intervals()]:
 #'
 #' * If `left` is `TRUE` and `close_end` is `TRUE`, breaks will look like
-#'   \code{[x1, x2), [x2, x3) ... [x_n-1, x_n]}.
+#'   \code{[b1, b2), [b2, b3) ... [b_n-1, b_n]}.
 #' * If `left` is `FALSE` and `close_end` is `TRUE`, breaks will look like
-#'    \code{[x1, x2], (x2, x3] ... (x_n-1, x_n]}.
+#'    \code{[b1, b2], (b2, b3] ... (b_n-1, b_n]}.
 #' * If `left` is `TRUE` and `close_end` is `FALSE`, all breaks will look like
-#'   \code{...[x1, x2) ...}.
+#'   \code{...[b1, b2) ...}.
 #' * If `left` is `FALSE` and `close_end` is `FALSE`, all breaks will look like
-#'   \code{...(x1, x2] ...}.
+#'   \code{...(b1, b2] ...}.
 #'
 #' ## Extending intervals
 #'
@@ -74,30 +82,38 @@ NULL
 #'
 #' If `extend` is `NULL` (the default), intervals will be extended to
 #' \code{[min(x), min(breaks))} and \code{(max(breaks), max(x)]}, *only* if
-#' necessary -- i.e. if `min(x) < min(breaks)` and `max(x) > max(breaks)`
-#' respectively.
+#' necessary -- i.e. if elements of `x` would be below or above the unextended
+#' breaks.
 #'
-#' Extending intervals, either by `extend = NULL` or `extend = TRUE`,
-#' *always* leaves the central, non-extended intervals unchanged. In particular,
-#' `close_end` applies to the central intervals, not to the extended ones.
-#' For example, if `breaks = c(1, 3, 5)` and `close_end = TRUE`, the resulting
-#' breaks will be
-#'
-#' \code{[1, 3), [3, 5]}
-#'
-#' and if `extend = TRUE` the result will be
-#'
-#' \code{[-Inf, 1), [1, 3), [3, 5], (5, Inf]}
-#'
+#' `close_end` is applied after breaks are extended, i.e. always to the very last
+#' or very first break. This is a change from
+#' previous behaviour. Up to version 0.8.0, `close_end` was applied to the
+#' user-specified intervals, then `extend` was applied. Note that
+#' if breaks are extended, then the extended break is always closed anyway.
 #'
 #' ## Labels
 #'
 #' `labels` may be a character vector. It should have the same length as the
-#' number of intervals. Alternatively, use a `lbl_*` function such as
-#' [lbl_seq()].
+#' (possibly extended) number of intervals. Alternatively, `labels` may be a
+#' `lbl_*` function such as [lbl_seq()].
+#'
+#' If `breaks` is a named vector, then non-zero-length names of `breaks` will be
+#' used as labels for the interval starting at the corresponding element. This
+#' overrides the `labels` argument (but unnamed breaks will still use `labels`).
+#' This feature is `r lifecycle::badge("experimental")`.
 #'
 #' If `labels` is `NULL`, then integer codes will be returned instead of a
 #' factor.
+#'
+#' If `raw` is `TRUE`, labels will show the actual numbers calculated by breaks.
+#' If `raw` is `FALSE` then labels may show other objects, such
+#' as quantiles for [chop_quantiles()] and friends, proportions of the range for
+#'  [chop_proportions()], or standard deviations for [chop_mean_sd()].
+#'
+#'  If `raw` is `NULL` then `lbl_*` functions will use their default (usually
+#'  `FALSE`). Otherwise, `raw` argument to `chop()` overrides `raw` arguments
+#'  passed into `lbl_*` functions directly.
+#'
 #'
 #' ## Miscellaneous
 #'
@@ -125,37 +141,60 @@ NULL
 #'   aren't numbers.
 #'
 #' @examples
-#' chop(1:3, 2)
 #'
-#' chop(1:10, c(2, 5, 8))
+#' chop(1:7, c(2, 4, 6))
 #'
-#' chop(1:10, c(2, 5, 8), extend = FALSE)
+#' chop(1:7, c(2, 4, 6), extend = FALSE)
 #'
-#' chop(1:10, c(2, 5, 5, 8))
+#' # Repeat a number for a singleton break:
+#' chop(1:7, c(2, 4, 4, 6))
 #'
-#' chop(1:10, c(2, 5, 8), left = FALSE)
+#' chop(1:7, c(2, 4, 6), left = FALSE)
 #'
-#' chop(1:10, c(2, 5, 8), close_end = TRUE)
+#' chop(1:7, c(2, 4, 6), close_end = FALSE)
 #'
-#' chop(1:10, brk_quantiles(c(0.25, 0.75)))
+#' chop(1:7, brk_quantiles(c(0.25, 0.75)))
 #'
-#' chop(1:10, c(2, 5, 8), labels = lbl_dash())
+#' # A single break is fine if `extend` is not `FALSE`:
+#' chop(1:7, 4)
 #'
-#' # floating point inaccuracy:
+#' # Floating point inaccuracy:
 #' chop(0.3/3, c(0, 0.1, 0.1, 1), labels = c("< 0.1", "0.1", "> 0.1"))
 #'
+#' # -- Labels --
+#'
+#' chop(1:7, c(Lowest = 1, Low = 2, Mid = 4, High = 6))
+#'
+#' chop(1:7, c(2, 4, 6), labels = c("Lowest", "Low", "Mid", "High"))
+#'
+#' chop(1:7, c(2, 4, 6), labels = lbl_dash())
+#'
+#' # Mixing names and other labels:
+#' chop(1:7, c("<2" = 1, 2, 4, ">=6" = 6), labels = lbl_dash())
+#'
+#' # -- Non-standard types --
+#'
+#' chop(as.Date("2001-01-01") + 1:7, as.Date("2001-01-04"))
+#'
+#' suppressWarnings(chop(LETTERS[1:7], "D"))
+#'
+#'
 chop <- function (x, breaks,
-        labels    = lbl_intervals(),
-        extend    = NULL,
-        left      = TRUE,
-        close_end = FALSE,
-        drop      = TRUE
-      ) {
+          labels    = lbl_intervals(),
+          extend    = NULL,
+          left      = TRUE,
+          close_end = TRUE,
+          raw       = NULL,
+          drop      = TRUE
+        ) {
   assert_that(
+          is.flag(extend) || is.null(extend),
           is.flag(left),
           is.flag(close_end),
-          is.flag(drop)
+          is.flag(drop),
+          is.flag(raw) || is.null(raw)
         )
+
   if (! is.function(breaks)) breaks <- brk_default(breaks)
   breaks <- breaks(x, extend, left, close_end)
   assert_that(is.breaks(breaks), length(breaks) >= 2L)
@@ -164,16 +203,21 @@ chop <- function (x, breaks,
 
   if (is.null(labels)) return(codes)
 
-  if (is.function(labels)) labels <- labels(breaks)
-  stopifnot(length(labels) == length(breaks) - 1)
+  lbls <- if (is.function(labels)) {
+    if (is.null(raw)) labels(breaks) else labels(breaks, raw = raw)
+  } else {
+    labels
+  }
+  lbls <- add_break_names(lbls, breaks)
+  stopifnot(length(lbls) == length(breaks) - 1)
 
   real_codes <- if (drop) unique(codes[! is.na(codes)]) else TRUE
-  if (anyDuplicated(labels[real_codes])) {
-    stop("Duplicate labels found: ", paste(labels, collapse = ", "))
+  if (anyDuplicated(lbls[real_codes])) {
+    stop("Duplicate labels found: ", paste(lbls, collapse = ", "))
   }
 
   result <- factor(codes, levels = seq.int(length(breaks) - 1L),
-        labels = labels)
+        labels = lbls)
   if (drop) result <- droplevels(result)
 
   return(result)
@@ -187,12 +231,11 @@ kiru <- chop
 
 #' Chop data precisely (for programmers)
 #'
-#' @inheritParams chop
-#'
-#' @details
 #' `fillet()` calls [chop()] with `extend = FALSE` and `drop = FALSE`. This
 #' ensures that you get only the `breaks` and `labels` you ask for. When
 #' programming, consider using `fillet()` instead of `chop()`.
+#'
+#' @inheritParams chop
 #'
 #' @return `fillet()` returns a [`factor`] of the same length as `x`, representing
 #'   the intervals containing the value of `x`.
@@ -203,9 +246,16 @@ kiru <- chop
 #'
 #' @examples
 #' fillet(1:10, c(2, 5, 8))
-fillet <- function (x, breaks, labels = lbl_intervals(), left = TRUE, close_end = FALSE) {
+fillet <- function (
+            x,
+            breaks,
+            labels    = lbl_intervals(),
+            left      = TRUE,
+            close_end = TRUE,
+            raw       = NULL
+          ) {
   chop(x, breaks, labels, left = left, close_end = close_end, extend = FALSE,
-      drop = FALSE)
+      raw = raw, drop = FALSE)
 }
 
 
@@ -214,17 +264,14 @@ fillet <- function (x, breaks, labels = lbl_intervals(), left = TRUE, close_end 
 #' `chop_quantiles()` chops data by quantiles.
 #' `chop_deciles()` is a convenience shortcut and chops into deciles.
 #'
-#' @param probs A vector of probabilities for the quantiles.
+#' @param probs A vector of probabilities for the quantiles. If `probs` has
+#'   names, these will be used for labels.
 #' @param ... Passed to [chop()], or for `brk_quantiles()` to
 #'   [stats::quantile()].
 #' @inheritParams chop
 #' @inherit chop-doc params return
 #'
 #' @details
-#' Note that these functions set `close_end = TRUE` by default.
-#' This helps ensure that e.g. `chop_quantiles(x, c(0, 1/3, 2/3, 1)`
-#' will split the data into three equal-sized groups.
-#'
 #' For non-numeric `x`, `left` is set to `FALSE` by default. This works better
 #' for calculating "type 1" quantiles, since they round down. See
 #' [stats::quantile()].
@@ -237,21 +284,23 @@ fillet <- function (x, breaks, labels = lbl_intervals(), left = TRUE, close_end 
 #' @examples
 #' chop_quantiles(1:10, 1:3/4)
 #'
+#' chop_quantiles(1:10, c(Q1 = 0, Q2 = 0.25, Q3 = 0.5, Q4 = 0.75))
+#'
 #' chop(1:10, brk_quantiles(1:3/4))
 #'
 #' chop_deciles(1:10)
 #'
 #' # to label by the quantiles themselves:
-#' chop_quantiles(1:10, 1:3/4, lbl_intervals(raw = TRUE))
+#' chop_quantiles(1:10, 1:3/4, raw = TRUE)
 #'
 chop_quantiles <- function(
-        x,
-        probs,
-        ...,
-        left      = is.numeric(x),
-        close_end = TRUE
-      ) {
-  chop(x, brk_quantiles(probs), ..., left = left, close_end = close_end)
+                    x,
+                    probs,
+                    ...,
+                    left      = is.numeric(x),
+                    raw       = FALSE
+                  ) {
+  chop(x, brk_quantiles(probs), ..., left = left, raw = raw)
 }
 
 
@@ -278,10 +327,17 @@ chop_deciles <- function(x, ...) {
 #' @examples
 #' chop_equally(1:10, 5)
 #'
-chop_equally <- function (x, groups, ..., labels = lbl_intervals(raw = TRUE),
-                            left = is.numeric(x), close_end = TRUE) {
+chop_equally <- function (
+                  x,
+                  groups,
+                  ...,
+                  labels    = lbl_intervals(),
+                  left      = is.numeric(x),
+                  close_end = TRUE,
+                  raw       = TRUE
+                ) {
   chop(x, brk_equally(groups), ..., labels = labels, left = left,
-         close_end = close_end)
+         close_end = close_end, raw = raw)
 }
 
 
@@ -311,8 +367,14 @@ chop_equally <- function (x, groups, ..., labels = lbl_intervals(raw = TRUE),
 #' chop(1:10, brk_mean_sd())
 #'
 #' @importFrom lifecycle deprecated
-chop_mean_sd <- function (x, sds = 1:3,  ..., sd = deprecated()) {
-  chop(x, brk_mean_sd(sds = sds, sd = sd), ...)
+chop_mean_sd <- function (
+                  x,
+                  sds = 1:3,
+                  ...,
+                  raw = FALSE,
+                  sd  = deprecated()
+                ) {
+  chop(x, brk_mean_sd(sds = sds, sd = sd), ..., raw = raw)
 }
 
 
@@ -377,8 +439,14 @@ chop_pretty <- function (x, n = 5, ...) {
 #'
 #' chop(1:10, brk_width(2, 0))
 #'
-chop_width <- function (x, width, start, ..., left = sign(width) > 0) {
-  chop(x, brk_width(width, start), left = left, ...)
+chop_width <- function (
+                x,
+                width,
+                start,
+                ...,
+                left = sign(width) > 0
+              ) {
+  chop(x, brk_width(width, start), ..., left = left)
 }
 
 
@@ -399,7 +467,12 @@ chop_width <- function (x, width, start, ..., left = sign(width) > 0) {
 #' @examples
 #' chop_evenly(0:10, 5)
 #'
-chop_evenly <- function (x, intervals, ..., close_end = TRUE) {
+chop_evenly <- function (
+                 x,
+                 intervals,
+                 ...,
+                 close_end = TRUE
+               ) {
   chop(x, brk_evenly(intervals), ..., close_end = close_end)
 }
 
@@ -410,28 +483,32 @@ chop_evenly <- function (x, intervals, ..., close_end = TRUE) {
 #' infinite values.
 #'
 #' By default, labels show the raw numeric endpoints. To label intervals by
-#' the proportions, use `labels = lbl_intervals(raw = FALSE)`.
+#' the proportions, use `raw = FALSE`.
 #'
-#' @param proportions Numeric vector between 0 and 1: proportions of x's range
+#' @param proportions Numeric vector between 0 and 1: proportions of x's range.
+#'   If `proportions` has names, these will be used for labels.
 #' @inheritParams chop
 #' @inherit chop-doc params return
 #'
-#' @family chopping functions
-#'
 #' @export
 #' @order 1
+#' @family chopping functions
 #' @examples
 #' chop_proportions(0:10, c(0.2, 0.8))
+#' chop_proportions(0:10, c(Low = 0, Mid = 0.2, High = 0.8))
 #'
-chop_proportions <- function (x, proportions, ...,
-                                labels = lbl_intervals(raw = TRUE)) {
-  chop(x, brk_proportions(proportions), labels = labels, ...)
+chop_proportions <- function (
+                      x,
+                      proportions,
+                      ...,
+                      raw    = TRUE
+                    ) {
+  chop(x, brk_proportions(proportions), ..., raw = raw)
 }
 
 #' Chop into fixed-sized groups
 #'
-#' `chop_n()` creates intervals containing a fixed number of elements. One
-#' interval may have fewer elements.
+#' `chop_n()` creates intervals containing a fixed number of elements.
 #'
 #' @param n Integer: number of elements in each interval.
 #' @inheritParams chop
@@ -440,14 +517,16 @@ chop_proportions <- function (x, proportions, ...,
 #' @details
 #' Note that `chop_n()` sets `close_end = TRUE` by default.
 #'
+#' If `length(x)` is not divided exactly by `n`, one interval will have fewer
+#' than `n` elements. This will be the last interval if `left` is `TRUE`, and
+#' the first interval otherwise.
+#'
 #' Groups may be larger than `n`, if there are too many duplicated elements
 #' in `x`. If so, a warning is given.
 #'
 #' @export
 #' @order 1
-#'
 #' @family chopping functions
-#'
 #' @examples
 #' chop_n(1:10, 5)
 #'
@@ -455,11 +534,52 @@ chop_proportions <- function (x, proportions, ...,
 #' x <- rep(1:2, each = 3)
 #' chop_n(x, 2)
 #'
-chop_n <- function (x, n, ..., close_end = TRUE) {
+chop_n <- function (
+            x,
+            n,
+            ...,
+            close_end = TRUE
+          ) {
   res <- chop(x, brk_n(n), ..., close_end = close_end)
   if (max(tabulate(res)) > n) {
     warning("Some intervals contain more than ", n, " elements")
   }
 
   res
+}
+
+#' Chop using an existing function
+#'
+#' `chop_fn()` is a convenience wrapper: `chop_fn(x, foo, ...)`
+#' is the same as `chop(x, foo(x, ...))`.
+#'
+#' @param fn A function which returns a numeric vector of breaks.
+#' @param ... Further arguments to `fn`
+#' @inheritParams chop
+#' @inherit chop-doc params return
+#'
+#' @export
+#' @order 1
+#' @family chopping functions
+#' @examples
+#'
+#' if (requireNamespace("scales")) {
+#'   chop_fn(rlnorm(10), scales::breaks_log(5))
+#'   # same as
+#'   # x <- rlnorm(10)
+#'   # chop(x, scales::breaks_log(5)(x))
+#' }
+#'
+chop_fn <- function (
+             x,
+             fn,
+             ...,
+             extend = NULL,
+             left = TRUE,
+             close_end = TRUE,
+             raw = NULL,
+             drop = TRUE
+) {
+  chop(x, brk_fn(fn, ...), extend = extend, left = left, close_end = close_end,
+         raw = raw, drop = drop)
 }

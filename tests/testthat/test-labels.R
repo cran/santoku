@@ -5,6 +5,10 @@ brackets <- function (x) paste0("(", x, ")")
 test_that("lbl_manual", {
   brk <- brk_res(brk_manual(1:3, rep(TRUE, 3)))
 
+  lifecycle::expect_deprecated(lbl_manual(letters))
+
+  withr::local_options(lifecycle_verbosity = "quiet")
+
   expect_error(lbl_manual(c("a", "a")))
   expect_equivalent(lbl_manual(letters[1])(brk), c("a", "aa"))
 })
@@ -29,8 +33,8 @@ test_that("lbl_seq", {
   expect_equivalent(lbl_seq("1)")(brk), c("1)", "2)"))
 
   brk_many <- brk_res(brk_manual(1:28, rep(TRUE, 28)))
-  expect_equivalent(lbl_seq("a")(brk_many), c(letters, "aa"))
-  expect_equivalent(lbl_seq("A)")(brk_many), paste0(c(LETTERS, "AA"), ")"))
+  expect_error(lbl_seq("a")(brk_many))
+  expect_error(lbl_seq("A)")(brk_many))
 })
 
 
@@ -60,17 +64,20 @@ test_that("lbl_dash arguments", {
 
   qbrk <- brk_res(brk_quantiles(c(0, .5, 1)), x = 0:10)
   expect_equivalent(lbl_dash("-")(qbrk), c("0%-50%", "50%-100%"))
+  expect_equivalent(
+    lbl_dash("-", fmt = "%.3f")(qbrk),
+    c("0.000-0.500", "0.500-1.000")
+  )
+  expect_equivalent(lbl_dash("-", fmt = brackets)(brk), c("(1)-(2)", "(2)-(3)"))
+
+  lifecycle::expect_deprecated(lbl_dash(raw = TRUE))
+  withr::local_options(lifecycle_verbosity = "quiet")
+
   expect_equivalent(lbl_dash("-", raw = TRUE)(qbrk), c("0-5", "5-10"))
   expect_equivalent(
     lbl_dash("-", raw = TRUE, fmt = "%.2f")(qbrk),
     c("0.00-5.00", "5.00-10.00")
   )
-  expect_equivalent(
-    lbl_dash("-", fmt = "%.3f")(qbrk),
-    c("0.000-0.500", "0.500-1.000")
-  )
-
-  expect_equivalent(lbl_dash("-", fmt = brackets)(brk), c("(1)-(2)", "(2)-(3)"))
 })
 
 
@@ -122,6 +129,10 @@ test_that("lbl_glue arguments", {
   )
 
   qbrk <- brk_res(brk_quantiles(c(0, .5, 1)), x = 0:10)
+
+  lifecycle::expect_deprecated(lbl_glue("{l} / {r}", raw = TRUE))
+
+  withr::local_options(lifecycle_verbosity = "quiet")
   expect_equivalent(
     lbl_glue("{l} / {r}", raw = TRUE)(qbrk),
     c("0 / 5", "5 / 10")
@@ -191,6 +202,10 @@ test_that("lbl_midpoints arguments", {
 
   qbrk <- brk_res(brk_quantiles(c(0, 0.5, 1)), x = 0:10)
   expect_equivalent(lbl_midpoints(fmt = percent)(qbrk), c("25%", "75%"))
+
+  lifecycle::expect_deprecated(lbl_midpoints(raw = TRUE))
+
+  withr::local_options(lifecycle_verbosity = "quiet")
   expect_equivalent(lbl_midpoints(raw = TRUE)(qbrk), c("2.5", "7.5"))
 })
 
@@ -232,14 +247,7 @@ test_that("lbl_intervals arguments", {
     lbl_intervals()(qbrk),
     c("[0%, 50%)", "[50%, 100%)")
   )
-  expect_equivalent(
-    lbl_intervals(raw = TRUE)(qbrk),
-    c("[0, 5)", "[5, 10)")
-  )
-  expect_equivalent(
-    lbl_intervals(raw = TRUE, fmt = "%.2f")(qbrk),
-    c("[0.00, 5.00)", "[5.00, 10.00)")
-  )
+
   expect_equivalent(
     lbl_intervals(fmt = "%.2f")(qbrk),
     c("[0.00, 0.50)", "[0.50, 1.00)")
@@ -261,6 +269,19 @@ test_that("lbl_intervals arguments", {
   expect_equivalent(
     lbl_intervals(single = "[{l}]")(lbrk),
     c("[1, 2)", "[2]", "(2, 3)")
+  )
+
+  lifecycle::expect_deprecated(lbl_intervals(raw = TRUE))
+
+  withr::local_options(lifecycle_verbosity = "quiet")
+
+  expect_equivalent(
+    lbl_intervals(raw = TRUE)(qbrk),
+    c("[0, 5)", "[5, 10)")
+  )
+  expect_equivalent(
+    lbl_intervals(raw = TRUE, fmt = "%.2f")(qbrk),
+    c("[0.00, 5.00)", "[5.00, 10.00)")
   )
 })
 

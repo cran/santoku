@@ -1,8 +1,8 @@
 
 #' @name label-doc
 #' @param fmt String or function. A format for break endpoints.
-#' @param raw Logical. Always use raw `breaks` in labels, rather than e.g.
-#'   quantiles or standard deviations?
+#' @param raw `r lifecycle::badge("deprecated")`. Use the `raw` argument to [chop()]
+#'   instead.
 #' @param symbol String: symbol to use for the dash.
 #' @param ... Arguments passed to format methods.
 #'
@@ -61,7 +61,16 @@ NULL
 #' tab_evenly(runif(20), 10,
 #'       labels = lbl_intervals(fmt = percent))
 #'
-lbl_intervals <- function (fmt = NULL, single = "{{{l}}}", first = NULL, last = NULL, raw = FALSE) {
+lbl_intervals <- function (
+                   fmt    = NULL,
+                   single = "{{{l}}}",
+                   first  = NULL,
+                   last   = NULL,
+                   raw    = FALSE
+                 ) {
+  if (! isFALSE(raw)) {
+    lifecycle::deprecate_soft("0.9.0", "lbl_intervals(raw)", "chop(raw)")
+  }
   interval_glue <- "{ifelse(l_closed, '[', '(')}{l}, {r}{ifelse(r_closed, ']', ')')}"
   lbl_glue(label = interval_glue, single = single, fmt = fmt, first = first,
              last = last, raw = raw)
@@ -92,8 +101,17 @@ lbl_intervals <- function (fmt = NULL, single = "{{{l}}}", first = NULL, last = 
 #'
 #' pretty <- function (x) prettyNum(x, big.mark = ",", digits = 1)
 #' chop(runif(10) * 10000, c(3000, 7000), lbl_dash(" to ", fmt = pretty))
-lbl_dash <- function (symbol = em_dash(), fmt = NULL, single = "{l}", first = NULL,
-                      last = NULL, raw = FALSE) {
+lbl_dash <- function (
+              symbol = em_dash(),
+              fmt    = NULL,
+              single = "{l}",
+              first  = NULL,
+              last   = NULL,
+              raw    = FALSE
+            ) {
+  if (! isFALSE(raw)) {
+    lifecycle::deprecate_soft("0.9.0", "lbl_dash(raw)", "chop(raw)")
+  }
 
   label_glue <- paste0("{l}", symbol, "{r}")
   lbl_glue(label = label_glue, fmt = fmt, single = single, first = first,
@@ -115,9 +133,19 @@ lbl_dash <- function (symbol = em_dash(), fmt = NULL, single = "{l}", first = NU
 #'
 #' @examples
 #' chop(1:10, c(2, 5, 8), lbl_midpoints())
-lbl_midpoints <- function (fmt = NULL, single = NULL, first = NULL, last = NULL,
-                          raw = FALSE) {
-  function (breaks) {
+lbl_midpoints <- function (
+                   fmt    = NULL,
+                   single = NULL,
+                   first  = NULL,
+                   last   = NULL,
+                   raw    = FALSE
+                 ) {
+  if (! isFALSE(raw)) {
+    lifecycle::deprecate_soft("0.9.0", "lbl_midpoints(raw)", "chop(raw)")
+  }
+
+  RAW <- raw # avoid "recursive default argument reference"
+  function (breaks, raw = RAW) {
     assert_that(is.breaks(breaks))
 
     break_nums <- scaled_endpoints(breaks, raw = raw)
@@ -130,8 +158,8 @@ lbl_midpoints <- function (fmt = NULL, single = NULL, first = NULL, last = NULL,
     midpoints <- endpoint_labels(midpoints, raw = TRUE, fmt = fmt)
 
     gluer <- lbl_glue(label = "{m}", fmt = fmt, single = single, first = first,
-                        last = last, raw = raw, m = midpoints)
-    labels <- gluer(breaks)
+                        last = last, m = midpoints)
+    labels <- gluer(breaks, raw = raw)
 
     labels
   }
@@ -176,9 +204,15 @@ lbl_midpoints <- function (fmt = NULL, single = NULL, first = NULL, last = NULL,
 #' glue_string <- paste0(interval_left, "{l}", ", ", "{r}", interval_right)
 #' tab(1:10, c(1, 3, 3, 7), label = lbl_glue(glue_string, single = "{{{l}}}"))
 #'
-lbl_glue <- function (label, fmt = NULL, single = NULL, first = NULL, last = NULL,
-                      raw = FALSE, ...) {
-
+lbl_glue <- function (
+              label,
+              fmt    = NULL,
+              single = NULL,
+              first  = NULL,
+              last   = NULL,
+              raw    = FALSE,
+              ...
+            ) {
   assert_that(
     is.string(label),
     is.null(fmt) || is_format(fmt),
@@ -187,7 +221,12 @@ lbl_glue <- function (label, fmt = NULL, single = NULL, first = NULL, last = NUL
     is.flag(raw)
   )
 
-  function (breaks) {
+  if (! isFALSE(raw)) {
+    lifecycle::deprecate_soft("0.9.0", "lbl_glue(raw)", "chop(raw)")
+  }
+
+  RAW <- raw # avoid "recursive default argument reference"
+  function (breaks, raw = RAW) {
     assert_that(is.breaks(breaks))
 
     len_breaks <- length(breaks)
@@ -268,7 +307,7 @@ lbl_glue <- function (label, fmt = NULL, single = NULL, first = NULL, last = NUL
 #' This is useful when the left endpoint unambiguously indicates the
 #' interval. In other cases it may give errors due to duplicate labels.
 #'
-#' `lbl_endpoint()` is deprecated. Do not use it.
+#' `lbl_endpoint()` is `r lifecycle::badge("deprecated")`. Do not use it.
 #'
 #' @inherit label-doc
 #' @inherit first-last-doc
@@ -288,9 +327,25 @@ lbl_glue <- function (label, fmt = NULL, single = NULL, first = NULL, last = NUL
 #'          labels = lbl_endpoints(fmt = "%b")
 #'        )
 #' }
-lbl_endpoints <- function (left = TRUE, fmt = NULL, single = NULL, first = NULL,
-                             last = NULL, raw = FALSE) {
+#'
+#' \dontrun{
+#'   # This gives breaks `[1, 2) [2, 3) {3}` which lead to
+#'   # duplicate labels `"2", "3", "3"`:
+#'   chop(1:3, 1:3, lbl_endpoints(left = FALSE))
+#' }
+lbl_endpoints <- function (
+                   left   = TRUE,
+                   fmt    = NULL,
+                   single = NULL,
+                   first  = NULL,
+                   last   = NULL,
+                   raw    = FALSE
+                 ) {
   assert_that(is.flag(left))
+
+  if (! isFALSE(raw)) {
+    lifecycle::deprecate_soft("0.9.0", "lbl_endpoints(raw)", "chop(raw)")
+  }
 
   label <- if (left) "{l}" else "{r}"
   lbl_glue(label, fmt = fmt, single = single, first = first, last = last,
@@ -300,8 +355,12 @@ lbl_endpoints <- function (left = TRUE, fmt = NULL, single = NULL, first = NULL,
 
 #' @rdname lbl_endpoints
 #' @export
-lbl_endpoint <- function (fmt = NULL, raw = FALSE, left = TRUE) {
-  lifecycle::deprecate_soft(when = "0.8.0", what = "lbl_endpoint()",
+lbl_endpoint <- function (
+                  fmt  = NULL,
+                  raw  = FALSE,
+                  left = TRUE
+                ) {
+  lifecycle::deprecate_warn(when = "0.8.0", what = "lbl_endpoint()",
                               with = "lbl_endpoints()")
    lbl_endpoints(fmt = fmt, raw = raw, left = left)
 }
@@ -356,7 +415,7 @@ lbl_discrete <- function (
           is.string(last) || is.null(last)
         )
 
-  function (breaks) {
+  function (breaks, raw = NULL) {
     assert_that(all(ceiling(as.numeric(breaks)) == floor(as.numeric(breaks))),
           msg = "Non-integer breaks")
 
@@ -456,16 +515,26 @@ lbl_seq <- function(start = "a") {
   fmt <- sub("(a|A|i|I|1)", "%s", start)
 
   res <- switch(key,
-    "a" = lbl_manual(letters, fmt),
-    "A" = lbl_manual(LETTERS, fmt),
-    "i" = function (breaks) {
-           sprintf(fmt, tolower(utils::as.roman(seq(1L, length(breaks) - 1L))))
+    "a" = function (breaks, raw = NULL) {
+            if (length(breaks) > 27L) {
+              stop("Can't use more than 26 intervals with lbl_seq(\"a\")")
+            }
+            sprintf(fmt, letters[seq_len(length(breaks) - 1L)])
+          },
+    "A" = function (breaks, raw = NULL) {
+            if (length(breaks) > 27L) {
+              stop("Can't use more than 26 intervals with lbl_seq(\"A\")")
+            }
+            sprintf(fmt, LETTERS[seq_len(length(breaks) - 1L)])
+          },
+    "i" = function (breaks, raw = NULL) {
+           sprintf(fmt, tolower(utils::as.roman(seq_len(length(breaks) - 1L))))
          },
-    "I" = function (breaks) {
-           sprintf(fmt, utils::as.roman(seq(1L, length(breaks) - 1L)))
+    "I" = function (breaks, raw = NULL) {
+           sprintf(fmt, utils::as.roman(seq_len(length(breaks) - 1L)))
          },
-    "1" = function (breaks) {
-            sprintf(fmt, seq(1L, length(breaks) - 1L))
+    "1" = function (breaks, raw = NULL) {
+            sprintf(fmt, seq_len(length(breaks) - 1L))
           }
     )
 
@@ -474,6 +543,12 @@ lbl_seq <- function(start = "a") {
 
 
 #' Label chopped intervals in a user-defined sequence
+#'
+#' `r lifecycle::badge("deprecated")`
+#'
+#' `lbl_manual()` is deprecated because it is little used and is not closely
+#' related to the rest of the package. It also risks mislabelling intervals, e.g.
+#' if intervals are extended.
 #'
 #' `lbl_manual()` uses an arbitrary sequence to label
 #' intervals. If the sequence is too short, it will be pasted with itself and
@@ -486,16 +561,19 @@ lbl_seq <- function(start = "a") {
 #'
 #' @export
 #'
+#' @keywords internal
+#'
 #' @examples
 #' chop(1:10, c(2, 5, 8), lbl_manual(c("w", "x", "y", "z")))
-#'
-#' # if labels need repeating:
-#' chop(1:10, 1:10, lbl_manual(c("x", "y", "z")))
+#' # ->
+#' chop(1:10, c(2, 5, 8), labels = c("w", "x", "y", "z"))
 lbl_manual <- function (sequence, fmt = "%s") {
+  lifecycle::deprecate_warn("0.9.0", "lbl_manual()",
+                            details = "Just specify `labels = sequence` instead.")
   assert_that(is_format(fmt))
 
   if (anyDuplicated(sequence) > 0L) stop("`sequence` contains duplicate items")
-  function (breaks) {
+  function (breaks, raw = NULL) {
     ls <- sequence
     latest <- ls
     while (length(breaks) - 1 > length(ls)) {

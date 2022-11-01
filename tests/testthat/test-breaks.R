@@ -30,12 +30,19 @@ test_that("brk_n", {
     b <- sample(5L, 1L)
     expect_true(all(tab(!!x, brk_n(!!b), drop = TRUE) <= !!b),
           info = sprintf("length(x) %s b %s", length(x), b))
+    # right-closed breaks
+    expect_true(all(tab(!!x, brk_n(!!b), drop = TRUE, left = FALSE) <= !!b),
+                info = sprintf("length(x) %s b %s left = FALSE", length(x), b))
   }
+
 })
 
 
 test_that("bugfix: brk_n shouldn't error with too many non-unique values", {
-  expect_error(brk_res(brk_n(2), c(1, 1, 1, 1, 5, 5, 5, 5)), regexp = NA)
+  expect_error(
+    brk_res(brk_n(2), x = c(1, 1, 1, 1, 5, 5, 5, 5)),
+    regexp = NA
+  )
 })
 
 
@@ -143,6 +150,26 @@ test_that("brk_pretty", {
   expect_equivalent(
     brks2,
     brk_res(brk_default(pretty(1:10, high.u.bias = 0)), x = 1:10)
+  )
+})
+
+
+test_that("brk_fn", {
+  x <- 1:10
+  expect_silent(
+    brks <- brk_res(brk_fn(scales::breaks_extended(5)), x = x)
+  )
+  expect_equivalent(
+    brks,
+    brk_res(brk_default(scales::breaks_extended(5)(x)))
+  )
+
+  expect_silent(
+    brks2 <- brk_res(brk_fn(pretty, n = 10), x = x)
+  )
+  expect_equivalent(
+    brks2,
+    brk_res(brk_default(pretty(x, n = 10)), x = x)
   )
 })
 

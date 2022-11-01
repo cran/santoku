@@ -32,8 +32,8 @@ for details.}
 \code{last = ">{l}"} to create a label like \code{">65"}. See \code{\link[=lbl_glue]{lbl_glue()}}
 for details.}
 
-\item{raw}{Logical. Always use raw \code{breaks} in labels, rather than e.g.
-quantiles or standard deviations?}
+\item{raw}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}. Use the \code{raw} argument to \code{\link[=chop]{chop()}}
+instead.}
 }
 \value{
 A function that creates a vector of labels.
@@ -43,7 +43,7 @@ This is useful when the left endpoint unambiguously indicates the
 interval. In other cases it may give errors due to duplicate labels.
 }
 \details{
-\code{lbl_endpoint()} is deprecated. Do not use it.
+\code{lbl_endpoint()} is \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}. Do not use it.
 }
 \section{Formatting endpoints}{
 
@@ -66,6 +66,12 @@ if (requireNamespace("lubridate")) {
          months(1),
          labels = lbl_endpoints(fmt = "\%b")
        )
+}
+
+\dontrun{
+  # This gives breaks `[1, 2) [2, 3) {3}` which lead to
+  # duplicate labels `"2", "3", "3"`:
+  chop(1:3, 1:3, lbl_endpoints(left = FALSE))
 }
 }
 \seealso{

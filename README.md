@@ -32,13 +32,18 @@ Here are some advantages of santoku:
     `chop(x, breaks = c(1, 2, 2, 3))` will create a separate factor
     level for values exactly equal to 2.
 
--   Flexible labelling, including easy ways to label intervals by
-    numerals or letters.
+-   `chop()` can handle many kinds of data, including numbers, dates and
+    times.
 
--   Convenience functions for creating quantile intervals, evenly-spaced
-    intervals or equal-sized groups.
+-   `chop_*` functions create intervals in many ways, using quantiles of
+    the data, standard deviations, fixed-width intervals, equal-sized
+    groups, or pretty intervals for use in graphs.
 
--   Convenience functions for quickly tabulating chopped data.
+-   `lbl_*` functions make it easy to label intervals: use interval
+    notation like `[1, 2)`, dash notation like `1-2`, or arbitrary
+    styles using `glue::glue()`.
+
+-   `tab_*` functions quickly chop data, then tabulate it.
 
 These advantages make santoku especially useful for exploratory
 analysis, where you may not know the range of your data in advance.
@@ -52,35 +57,43 @@ library(santoku)
 `chop` returns a factor:
 
 ``` r
-chop(1:8, c(3, 5, 7))
-#> [1] [1, 3) [1, 3) [3, 5) [3, 5) [5, 7) [5, 7) [7, 8] [7, 8]
-#> Levels: [1, 3) [3, 5) [5, 7) [7, 8]
+chop(1:5, c(2, 4))
+#> [1] [1, 2) [2, 4) [2, 4) [4, 5] [4, 5]
+#> Levels: [1, 2) [2, 4) [4, 5]
 ```
 
 Include a number twice to match it exactly:
 
 ``` r
-chop(1:8, c(3, 5, 5, 7))
-#> [1] [1, 3) [1, 3) [3, 5) [3, 5) {5}    (5, 7) [7, 8] [7, 8]
-#> Levels: [1, 3) [3, 5) {5} (5, 7) [7, 8]
+chop(1:5, c(2, 2, 4))
+#> [1] [1, 2) {2}    (2, 4) [4, 5] [4, 5]
+#> Levels: [1, 2) {2} (2, 4) [4, 5]
 ```
 
-Customize output with `lbl_*` functions:
+Use names in breaks for labels:
 
 ``` r
-chop(1:8, c(3, 5, 7), labels = lbl_dash())
-#> [1] 1—3 1—3 3—5 3—5 5—7 5—7 7—8 7—8
-#> Levels: 1—3 3—5 5—7 7—8
+chop(1:5, c(Low = 1, Mid = 2, High = 4))
+#> [1] Low  Mid  Mid  High High
+#> Levels: Low Mid High
+```
+
+Or use `lbl_*` functions:
+
+``` r
+chop(1:5, c(2, 4), labels = lbl_dash())
+#> [1] 1—2 2—4 2—4 4—5 4—5
+#> Levels: 1—2 2—4 4—5
 ```
 
 Chop into fixed-width intervals:
 
 ``` r
 chop_width(runif(10), 0.1)
-#>  [1] [0.8278, 0.9278)  [0.8278, 0.9278)  [0.8278, 0.9278)  [0.3278, 0.4278) 
-#>  [5] [0.7278, 0.8278)  [0.2278, 0.3278)  [0.9278, 1.028)   [0.02781, 0.1278)
-#>  [9] [0.9278, 1.028)   [0.02781, 0.1278)
-#> 6 Levels: [0.02781, 0.1278) [0.2278, 0.3278) ... [0.9278, 1.028)
+#>  [1] [0.58, 0.68)    [0.18, 0.28)    [0.68, 0.78)    [0.78, 0.88)   
+#>  [5] [0.18, 0.28)    [0.88, 0.98]    [0.28, 0.38)    [0.08001, 0.18)
+#>  [9] [0.08001, 0.18) [0.08001, 0.18)
+#> 7 Levels: [0.08001, 0.18) [0.18, 0.28) [0.28, 0.38) ... [0.88, 0.98]
 ```
 
 Or into fixed-size groups:
@@ -102,9 +115,9 @@ library(lubridate)
 #> 
 #>     date, intersect, setdiff, union
 
-tab_width(as.Date("2021-12-31") + 1:90, months(1), 
-            labels = lbl_discrete(fmt = "%d %b")
-          )
+dates <- as.Date("2021-12-31") + 1:90
+
+tab_width(dates, months(1), labels = lbl_discrete(fmt = "%d %b"))
 #> 01 Jan—31 Jan 01 Feb—28 Feb 01 Mar—31 Mar 
 #>            31            28            31
 ```

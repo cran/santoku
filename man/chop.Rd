@@ -12,7 +12,8 @@ chop(
   labels = lbl_intervals(),
   extend = NULL,
   left = TRUE,
-  close_end = FALSE,
+  close_end = TRUE,
+  raw = NULL,
   drop = TRUE
 )
 
@@ -22,7 +23,8 @@ kiru(
   labels = lbl_intervals(),
   extend = NULL,
   left = TRUE,
-  close_end = FALSE,
+  close_end = TRUE,
+  raw = NULL,
   drop = TRUE
 )
 
@@ -32,7 +34,8 @@ tab(
   labels = lbl_intervals(),
   extend = NULL,
   left = TRUE,
-  close_end = FALSE,
+  close_end = TRUE,
+  raw = NULL,
   drop = TRUE
 )
 }
@@ -44,12 +47,16 @@ cut-points from \code{x}.}
 
 \item{labels}{A character vector of labels or a function to create labels.}
 
-\item{extend}{Logical. Extend breaks to \verb{+/-Inf}?}
+\item{extend}{Logical. If \code{TRUE}, always extend breaks to \verb{+/-Inf}. If \code{NULL},
+extend breaks to \code{min(x)} and/or \code{max(x)} only if necessary. If \code{NULL}, never
+extend.}
 
-\item{left}{Logical. Left-closed breaks?}
+\item{left}{Logical. Left-closed or right-closed breaks?}
 
 \item{close_end}{Logical. Close last break at right? (If \code{left} is \code{FALSE},
 close first break at left?)}
+
+\item{raw}{Logical. Use raw values in labels?}
 
 \item{drop}{Logical. Drop unused levels from the result?}
 }
@@ -81,27 +88,32 @@ intervals: \code{[1, 3)}, \code{{3}} and \code{(3, 5]}.
 If \code{breaks} is a function, it is called with the \code{x}, \code{extend}, \code{left} and
 \code{close_end} arguments, and should return an object of class \code{breaks}.
 Use \verb{brk_*} functions to create a variety of data-dependent breaks.
+
+Names of \code{breaks} may be used for labels. See "Labels" below.
 }
 
 \subsection{Options for breaks}{
 
-By default, left-closed intervals are created. If \code{left} is \code{FALSE}, right-
-closed intervals are created.
+By default, left-closed intervals are created. If \code{left} is \code{FALSE},
+right-closed intervals are created.
 
-If \code{close_end} is \code{TRUE} the end break will be closed at both ends, ensuring
-that all values \code{x} with \verb{min(breaks) <= x <= max(breaks)} are included in
-the default intervals.
+If \code{close_end} is \code{TRUE} the final break (or first break if \code{left} is \code{FALSE})
+will be closed at both ends. This guarantees that all values \code{x} with
+\verb{min(breaks) <= x <= max(breaks)} are included in the intervals.
+
+Before version 0.9.0, \code{close_end} was \code{FALSE} by default, and also behaved
+differently with respect to extended breaks: see "Extending intervals" below.
 
 Using \link[=lbl_intervals]{mathematical set notation}:
 \itemize{
 \item If \code{left} is \code{TRUE} and \code{close_end} is \code{TRUE}, breaks will look like
-\code{[x1, x2), [x2, x3) ... [x_n-1, x_n]}.
+\code{[b1, b2), [b2, b3) ... [b_n-1, b_n]}.
 \item If \code{left} is \code{FALSE} and \code{close_end} is \code{TRUE}, breaks will look like
-\code{[x1, x2], (x2, x3] ... (x_n-1, x_n]}.
+\code{[b1, b2], (b2, b3] ... (b_n-1, b_n]}.
 \item If \code{left} is \code{TRUE} and \code{close_end} is \code{FALSE}, all breaks will look like
-\code{...[x1, x2) ...}.
+\code{...[b1, b2) ...}.
 \item If \code{left} is \code{FALSE} and \code{close_end} is \code{FALSE}, all breaks will look like
-\code{...(x1, x2] ...}.
+\code{...(b1, b2] ...}.
 }
 }
 
@@ -112,30 +124,38 @@ min(breaks))} and \code{(max(breaks), Inf]}.
 
 If \code{extend} is \code{NULL} (the default), intervals will be extended to
 \code{[min(x), min(breaks))} and \code{(max(breaks), max(x)]}, \emph{only} if
-necessary -- i.e. if \code{min(x) < min(breaks)} and \code{max(x) > max(breaks)}
-respectively.
+necessary -- i.e. if elements of \code{x} would be below or above the unextended
+breaks.
 
-Extending intervals, either by \code{extend = NULL} or \code{extend = TRUE},
-\emph{always} leaves the central, non-extended intervals unchanged. In particular,
-\code{close_end} applies to the central intervals, not to the extended ones.
-For example, if \code{breaks = c(1, 3, 5)} and \code{close_end = TRUE}, the resulting
-breaks will be
-
-\code{[1, 3), [3, 5]}
-
-and if \code{extend = TRUE} the result will be
-
-\code{[-Inf, 1), [1, 3), [3, 5], (5, Inf]}
+\code{close_end} is applied after breaks are extended, i.e. always to the very last
+or very first break. This is a change from
+previous behaviour. Up to version 0.8.0, \code{close_end} was applied to the
+user-specified intervals, then \code{extend} was applied. Note that
+if breaks are extended, then the extended break is always closed anyway.
 }
 
 \subsection{Labels}{
 
 \code{labels} may be a character vector. It should have the same length as the
-number of intervals. Alternatively, use a \verb{lbl_*} function such as
-\code{\link[=lbl_seq]{lbl_seq()}}.
+(possibly extended) number of intervals. Alternatively, \code{labels} may be a
+\verb{lbl_*} function such as \code{\link[=lbl_seq]{lbl_seq()}}.
+
+If \code{breaks} is a named vector, then non-zero-length names of \code{breaks} will be
+used as labels for the interval starting at the corresponding element. This
+overrides the \code{labels} argument (but unnamed breaks will still use \code{labels}).
+This feature is \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}.
 
 If \code{labels} is \code{NULL}, then integer codes will be returned instead of a
 factor.
+
+If \code{raw} is \code{TRUE}, labels will show the actual numbers calculated by breaks.
+If \code{raw} is \code{FALSE} then labels may show other objects, such
+as quantiles for \code{\link[=chop_quantiles]{chop_quantiles()}} and friends, proportions of the range for
+\code{\link[=chop_proportions]{chop_proportions()}}, or standard deviations for \code{\link[=chop_mean_sd]{chop_mean_sd()}}.
+
+If \code{raw} is \code{NULL} then \verb{lbl_*} functions will use their default (usually
+\code{FALSE}). Otherwise, \code{raw} argument to \code{chop()} overrides \code{raw} arguments
+passed into \verb{lbl_*} functions directly.
 }
 
 \subsection{Miscellaneous}{
@@ -152,24 +172,43 @@ below.
 }
 }
 \examples{
-chop(1:3, 2)
 
-chop(1:10, c(2, 5, 8))
+chop(1:7, c(2, 4, 6))
 
-chop(1:10, c(2, 5, 8), extend = FALSE)
+chop(1:7, c(2, 4, 6), extend = FALSE)
 
-chop(1:10, c(2, 5, 5, 8))
+# Repeat a number for a singleton break:
+chop(1:7, c(2, 4, 4, 6))
 
-chop(1:10, c(2, 5, 8), left = FALSE)
+chop(1:7, c(2, 4, 6), left = FALSE)
 
-chop(1:10, c(2, 5, 8), close_end = TRUE)
+chop(1:7, c(2, 4, 6), close_end = FALSE)
 
-chop(1:10, brk_quantiles(c(0.25, 0.75)))
+chop(1:7, brk_quantiles(c(0.25, 0.75)))
 
-chop(1:10, c(2, 5, 8), labels = lbl_dash())
+# A single break is fine if `extend` is not `FALSE`:
+chop(1:7, 4)
 
-# floating point inaccuracy:
+# Floating point inaccuracy:
 chop(0.3/3, c(0, 0.1, 0.1, 1), labels = c("< 0.1", "0.1", "> 0.1"))
+
+# -- Labels --
+
+chop(1:7, c(Lowest = 1, Low = 2, Mid = 4, High = 6))
+
+chop(1:7, c(2, 4, 6), labels = c("Lowest", "Low", "Mid", "High"))
+
+chop(1:7, c(2, 4, 6), labels = lbl_dash())
+
+# Mixing names and other labels:
+chop(1:7, c("<2" = 1, 2, 4, ">=6" = 6), labels = lbl_dash())
+
+# -- Non-standard types --
+
+chop(as.Date("2001-01-01") + 1:7, as.Date("2001-01-04"))
+
+suppressWarnings(chop(LETTERS[1:7], "D"))
+
 
 tab(1:10, c(2, 5, 8))
 
@@ -181,6 +220,7 @@ aren't numbers.
 Other chopping functions: 
 \code{\link{chop_equally}()},
 \code{\link{chop_evenly}()},
+\code{\link{chop_fn}()},
 \code{\link{chop_mean_sd}()},
 \code{\link{chop_n}()},
 \code{\link{chop_proportions}()},
