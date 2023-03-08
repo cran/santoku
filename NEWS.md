@@ -1,3 +1,7 @@
+# santoku 0.9.1
+
+* `endpoint_labels()` methods gain an unused `...` argument to satisfy R CMD CHECK.
+
 # santoku 0.9.0
 
 ## Breaking changes

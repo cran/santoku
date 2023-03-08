@@ -110,8 +110,8 @@ data.frame(
 ## -----------------------------------------------------------------------------
 data.frame(
   y = y,
-  rightmost_open = chop(y, 1:5),
-  rightmost_closed   = chop(y, 1:5, close_end = FALSE)
+  end_closed = chop(y, 1:5),
+  end_open   = chop(y, 1:5, close_end = FALSE)
 )
 
 
