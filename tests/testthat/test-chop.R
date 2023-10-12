@@ -273,6 +273,11 @@ test_that("chop_equally", {
     chop_equally(x, 2, labels = lbl_intervals(raw = TRUE)),
     chop_equally(x, 2, raw = TRUE)
   )
+
+  expect_warning(
+    chop_equally(c(1, 1, 2, 2), 4),
+    "Fewer"
+  )
 })
 
 
@@ -294,6 +299,13 @@ test_that("chop_n", {
   expect_equivalent(as.vector(table(res)), rep(2, 2))
 
   expect_warning(chop_n(rep(1:3, each = 3), 2))
+})
+
+
+test_that("Bugfix: chop_n(tail = 'merge') works with n > length(x)", {
+  expect_silent(
+    chop_n(1:3, 4, tail = "merge", extend = FALSE)
+  )
 })
 
 

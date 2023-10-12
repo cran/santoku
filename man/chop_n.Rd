@@ -6,21 +6,25 @@
 \alias{tab_n}
 \title{Chop into fixed-sized groups}
 \usage{
-chop_n(x, n, ..., close_end = TRUE)
+chop_n(x, n, ..., close_end = TRUE, tail = "split")
 
-brk_n(n)
+brk_n(n, tail = "split")
 
-tab_n(x, n, ...)
+tab_n(x, n, ..., tail = "split")
 }
 \arguments{
 \item{x}{A vector.}
 
-\item{n}{Integer: number of elements in each interval.}
+\item{n}{Integer. Number of elements in each interval.}
 
 \item{...}{Passed to \code{\link[=chop]{chop()}}.}
 
 \item{close_end}{Logical. Close last break at right? (If \code{left} is \code{FALSE},
 close first break at left?)}
+
+\item{tail}{String. What to do if the final interval has fewer than \code{n} elements?
+\code{"split"} to keep it separate. \code{"merge"} to merge it with the neighbouring
+interval.}
 }
 \value{
 \verb{chop_*} functions return a \code{\link{factor}} of the same length as \code{x}.
@@ -33,17 +37,22 @@ close first break at left?)}
 \code{chop_n()} creates intervals containing a fixed number of elements.
 }
 \details{
-Note that \code{chop_n()} sets \code{close_end = TRUE} by default.
+The algorithm guarantees that intervals contain no more than \code{n} elements, so
+long as there are no duplicates in \code{x} and \code{tail = "split"}. It also
+guarantees that intervals contain no fewer than \code{n} elements, except possibly
+the last interval (or first interval if \code{left} is \code{FALSE}).
 
-If \code{length(x)} is not divided exactly by \code{n}, one interval will have fewer
-than \code{n} elements. This will be the last interval if \code{left} is \code{TRUE}, and
-the first interval otherwise.
+To ensure that all intervals contain at least \code{n} elements (so long as there
+are at least \code{n} elements in \code{x}!) set \code{tail = "merge"}.
 
-Groups may be larger than \code{n}, if there are too many duplicated elements
-in \code{x}. If so, a warning is given.
+If \code{tail = "split"} and there are intervals containing duplicates with more
+than \code{n} elements, a warning is given.
 }
 \examples{
 chop_n(1:10, 5)
+
+chop_n(1:5, 2)
+chop_n(1:5, 2, tail = "merge")
 
 # too many duplicates
 x <- rep(1:2, each = 3)

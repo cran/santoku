@@ -11,7 +11,7 @@ status](https://www.r-pkg.org/badges/version/santoku)](https://CRAN.R-project.or
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![CRAN Downloads Per
 Month](http://cranlogs.r-pkg.org/badges/santoku)](https://CRAN.R-project.org/package=santoku)
-[![R-universe](https://hughjonesd.r-universe.dev/badges/santoku)](https://hughjonesd.r-universe.dev/ui/#package:santoku)
+[![R-universe](https://hughjonesd.r-universe.dev/badges/santoku)](https://hughjonesd.r-universe.dev/santoku)
 [![R-CMD-check](https://github.com/hughjonesd/santoku/workflows/R-CMD-check/badge.svg)](https://github.com/hughjonesd/santoku/actions)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/hughjonesd/santoku?branch=master&svg=true)](https://ci.appveyor.com/project/hughjonesd/santoku)
@@ -21,6 +21,28 @@ coverage](https://codecov.io/gh/hughjonesd/santoku/branch/master/graph/badge.svg
 
 santoku is a versatile cutting tool for R. It provides `chop()`, a
 replacement for `base::cut()`.
+
+## Installation
+
+Install from [r-universe](https://r-universe.dev):
+
+``` r
+install.packages("santoku", repos = c("https://hughjonesd.r-universe.dev", 
+                                      "https://cloud.r-project.org"))
+```
+
+Or from CRAN:
+
+``` r
+install.packages("santoku")
+```
+
+Or get the development version from github:
+
+``` r
+# install.packages("remotes")
+remotes::install_github("hughjonesd/santoku")
+```
 
 ## Advantages
 
@@ -91,10 +113,10 @@ Chop into fixed-width intervals:
 
 ``` r
 chop_width(runif(10), 0.1)
-#>  [1] [0.1405, 0.2405)  [0.3405, 0.4405)  [0.5405, 0.6405)  [0.4405, 0.5405) 
-#>  [5] [0.04047, 0.1405) [0.04047, 0.1405) [0.3405, 0.4405)  [0.8405, 0.9405] 
-#>  [9] [0.6405, 0.7405)  [0.4405, 0.5405) 
-#> 7 Levels: [0.04047, 0.1405) [0.1405, 0.2405) ... [0.8405, 0.9405]
+#>  [1] [0.1399, 0.2399) [0.5399, 0.6399) [0.5399, 0.6399) [0.5399, 0.6399)
+#>  [5] [0.6399, 0.7399) [0.3399, 0.4399) [0.8399, 0.9399] [0.8399, 0.9399]
+#>  [9] [0.5399, 0.6399) [0.1399, 0.2399)
+#> 5 Levels: [0.1399, 0.2399) [0.3399, 0.4399) ... [0.8399, 0.9399]
 ```
 
 Or into fixed-size groups:
@@ -110,7 +132,6 @@ Chop dates by calendar month, then tabulate:
 
 ``` r
 library(lubridate)
-#> Loading required package: timechange
 #> 
 #> Attaching package: 'lubridate'
 #> The following objects are masked from 'package:base':

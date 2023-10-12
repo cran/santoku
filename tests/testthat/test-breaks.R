@@ -35,6 +35,47 @@ test_that("brk_n", {
                 info = sprintf("length(x) %s b %s left = FALSE", length(x), b))
   }
 
+  # test with duplicates in x
+  for (i in 1:10) {
+    x <- rnorm(10)
+    x <- sample(x, replace = TRUE)
+    b <- sample(5L, 1L)
+    tbl <- tab(x, brk_n(b), drop = TRUE)
+    # all but the last category should have size >= b
+    expect_true(all(tbl[-length(tbl)] >= b),
+          info = sprintf("length(x) %s b %s", length(x), b))
+    # right-closed breaks
+    tbl <- tab(x, brk_n(b), drop = TRUE, left = FALSE)
+    expect_true(all(tbl[-1] >= b),
+          info = sprintf("length(x) %s b %s", length(x), b))
+  }
+})
+
+
+test_that("brk_n, tail = 'merge'", {
+  x <- 1:5
+  res <- brk_res(brk_n(3, tail = "merge"), x = x)
+  expect_equal(as.vector(tab(x, res)), 5)
+
+  x <- 1:6
+  res <- brk_res(brk_n(3, tail = "merge"), x = x)
+  expect_equal(as.vector(tab(x, res)), c(3, 3))
+
+  x <- 1:7
+  res <- brk_res(brk_n(3, tail = "merge"), x = x)
+  expect_equal(as.vector(tab(x, res)), c(3, 4))
+
+  x <- c(1, 1, 1, 2, 2)
+  res <- brk_res(brk_n(3, tail = "merge"), x = x)
+  expect_equal(as.vector(tab(x, res)), 5)
+
+  x <- c(1, 1, 1, 2, 2, 2)
+  res <- brk_res(brk_n(3, tail = "merge"), x = x)
+  expect_equal(as.vector(tab(x, res)), c(3, 3))
+
+  x <- c(1, 1, 1, 2, 2, 2, 2)
+  res <- brk_res(brk_n(3, tail = "merge"), x = x)
+  expect_equal(as.vector(tab(x, res)), c(3, 4))
 })
 
 
@@ -43,6 +84,21 @@ test_that("bugfix: brk_n shouldn't error with too many non-unique values", {
     brk_res(brk_n(2), x = c(1, 1, 1, 1, 5, 5, 5, 5)),
     regexp = NA
   )
+})
+
+
+test_that("bugfix: brk_n shouldn't take too few elems after non-unique values", {
+  x <- c(1, 1, 1, 1, 2, 3, 4)
+  res <- brk_res(brk_n(3), x = x)
+  expect_equal(as.vector(tab(x, res)), c(4, 3))
+
+  x <- c(1, 2, 3, 3, 4, 5, 6)
+  res <- brk_res(brk_n(3), x = x)
+  expect_equal(as.vector(tab(x, res)), c(4, 3))
+
+  x <- c(1, 2, 3, 3, 4)
+  res <- brk_res(brk_n(2), x = x)
+  expect_equal(as.vector(tab(x, res)), c(2, 2, 1))
 })
 
 
@@ -142,6 +198,12 @@ test_that("brk_equally", {
 })
 
 
+test_that("brk_equally warns when too few breaks created", {
+  dupes <- c(1, 1, 1, 2, 3, 4, 4, 4)
+  expect_warning(brk_res(brk_equally(4), x = dupes))
+})
+
+
 test_that("brk_pretty", {
   expect_silent(brks <- brk_res(brk_pretty(5), x = 1:10))
   expect_equivalent(brks, brk_res(brk_default(pretty(1:10)), x = 1:10))
@@ -175,10 +237,10 @@ test_that("brk_fn", {
 
 
 test_that("printing", {
-  b <- brk_default(1:3)
+  b <- brk_res(brk_default(1:3))
   expect_output(print(b))
   expect_silent(format(b))
-  b_empty <- brk_default(1)
+  b_empty <- brk_res(brk_default(1))
   expect_output(print(b_empty))
 })
 

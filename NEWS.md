@@ -1,3 +1,18 @@
+# santoku 0.10.0
+
+* List arguments to `fmt` in `lbl_*` functions will be taken as arguments to
+  `base::format`. This gives more flexibility in formatting, e.g., `units`
+  breaks.
+* `chop_n()` gains a `tail` argument, to deal with a last interval containing
+  less than `n` elements. Set `tail = "merge"` to merge it with
+  the previous interval. This guarantees that all intervals contain at least
+  `n` elements.
+* `chop_equally()` may return fewer than `groups` groups when there are 
+  duplicate elements. We now warn when this happens.
+* Bugfix: `chop_n()` could return intervals with fewer than `n` elements 
+  when there were duplicate elements. The new algorithm avoids this, but
+  may be slower in this case.
+
 # santoku 0.9.1
 
 * `endpoint_labels()` methods gain an unused `...` argument to satisfy R CMD CHECK.

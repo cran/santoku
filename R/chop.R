@@ -320,6 +320,13 @@ chop_deciles <- function(x, ...) {
 #' @inheritParams chop
 #' @inherit chop-doc params return
 #'
+#' @details
+#' `chop_equally()` uses [chop_quantiles()] under the hood. If `x` has duplicate
+#' elements, you may get fewer `groups` than requested. If so, a warning will
+#' be emitted. See the examples.
+#'
+#'
+#'
 #' @family chopping functions
 #'
 #' @export
@@ -327,6 +334,10 @@ chop_deciles <- function(x, ...) {
 #' @examples
 #' chop_equally(1:10, 5)
 #'
+#' # You can't always guarantee `groups` groups:
+#' dupes <- c(1, 1, 1, 2, 3, 4, 4, 4)
+#' quantile(dupes, 0:4/4)
+#' chop_equally(dupes, 4)
 chop_equally <- function (
                   x,
                   groups,
@@ -510,25 +521,35 @@ chop_proportions <- function (
 #'
 #' `chop_n()` creates intervals containing a fixed number of elements.
 #'
-#' @param n Integer: number of elements in each interval.
+#' @param n Integer. Number of elements in each interval.
 #' @inheritParams chop
+#' @param tail String. What to do if the final interval has fewer than `n` elements?
+#'   `"split"` to keep it separate. `"merge"` to merge it with the neighbouring
+#'   interval.
 #' @inherit chop-doc params return
 #'
+#'
 #' @details
-#' Note that `chop_n()` sets `close_end = TRUE` by default.
 #'
-#' If `length(x)` is not divided exactly by `n`, one interval will have fewer
-#' than `n` elements. This will be the last interval if `left` is `TRUE`, and
-#' the first interval otherwise.
+#' The algorithm guarantees that intervals contain no more than `n` elements, so
+#' long as there are no duplicates in `x` and `tail = "split"`. It also
+#' guarantees that intervals contain no fewer than `n` elements, except possibly
+#' the last interval (or first interval if `left` is `FALSE`).
 #'
-#' Groups may be larger than `n`, if there are too many duplicated elements
-#' in `x`. If so, a warning is given.
+#' To ensure that all intervals contain at least `n` elements (so long as there
+#' are at least `n` elements in `x`!) set `tail = "merge"`.
+#'
+#' If `tail = "split"` and there are intervals containing duplicates with more
+#' than `n` elements, a warning is given.
 #'
 #' @export
 #' @order 1
 #' @family chopping functions
 #' @examples
 #' chop_n(1:10, 5)
+#'
+#' chop_n(1:5, 2)
+#' chop_n(1:5, 2, tail = "merge")
 #'
 #' # too many duplicates
 #' x <- rep(1:2, each = 3)
@@ -538,10 +559,11 @@ chop_n <- function (
             x,
             n,
             ...,
-            close_end = TRUE
+            close_end = TRUE,
+            tail = "split"
           ) {
-  res <- chop(x, brk_n(n), ..., close_end = close_end)
-  if (max(tabulate(res)) > n) {
+  res <- chop(x, brk_n(n, tail = tail), ..., close_end = close_end)
+  if (tail == "split" && max(tabulate(res)) > n) {
     warning("Some intervals contain more than ", n, " elements")
   }
 
