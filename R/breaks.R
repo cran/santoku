@@ -3,12 +3,13 @@
 #'
 #' @export
 #' @order 2
-brk_quantiles <- function (probs, ...) {
+brk_quantiles <- function (probs, ..., weights = NULL) {
   assert_that(
           is.numeric(probs),
           noNA(probs),
           all(probs >= 0),
-          all(probs <= 1)
+          all(probs <= 1),
+          is.null(weights) || is.numeric(weights)
         )
   probs <- sort(probs)
 
@@ -18,13 +19,21 @@ brk_quantiles <- function (probs, ...) {
     if (! is.numeric(x) && ! "type" %in% names(dots)) dots$type <- 1
     dots$probs <- probs
     dots$na.rm <- TRUE
-    qs <- do.call(stats::quantile, dots)
+
+    qs <- if (is.null(weights)) {
+      do.call(stats::quantile, dots)
+    } else {
+      rlang::check_installed("Hmisc",
+                             reason = "to use `weights` in brk_quantiles()")
+      dots$weights <- weights
+      do.call(Hmisc::wtd.quantile, dots)
+    }
 
     if (anyNA(qs)) return(empty_breaks()) # data was all NA
 
-    non_dupes <- ! duplicated(qs)
-    qs <- qs[non_dupes]
-    probs <- probs[non_dupes]
+    dupe_middles <- find_duplicated_middles(qs)
+    qs <- qs[! dupe_middles]
+    probs <- probs[! dupe_middles]
 
     breaks <- create_lr_breaks(qs, left)
 
@@ -69,7 +78,7 @@ brk_equally <- function (groups) {
 #' @importFrom lifecycle deprecated
 brk_mean_sd <- function (sds = 1:3, sd = deprecated()) {
   if (lifecycle::is_present(sd)) {
-    lifecycle::deprecate_soft(
+    lifecycle::deprecate_warn(
             when = "0.7.0",
             what = "brk_mean_sd(sd)",
             with = "brk_mean_sd(sds = 'vector of sds')"
